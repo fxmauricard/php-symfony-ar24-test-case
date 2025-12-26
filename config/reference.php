@@ -681,28 +681,244 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         enabled?: bool, // Default: false
  *     },
  * }
+ * @psalm-type DoctrineConfig = array{
+ *     dbal?: array{
+ *         default_connection?: scalar|null,
+ *         types?: array<string, string|array{ // Default: []
+ *             class: scalar|null,
+ *         }>,
+ *         driver_schemes?: array<string, scalar|null>,
+ *         connections?: array<string, array{ // Default: []
+ *             url?: scalar|null, // A URL with connection information; any parameter value parsed from this string will override explicitly set parameters
+ *             dbname?: scalar|null,
+ *             host?: scalar|null, // Defaults to "localhost" at runtime.
+ *             port?: scalar|null, // Defaults to null at runtime.
+ *             user?: scalar|null, // Defaults to "root" at runtime.
+ *             password?: scalar|null, // Defaults to null at runtime.
+ *             dbname_suffix?: scalar|null, // Adds the given suffix to the configured database name, this option has no effects for the SQLite platform
+ *             application_name?: scalar|null,
+ *             charset?: scalar|null,
+ *             path?: scalar|null,
+ *             memory?: bool,
+ *             unix_socket?: scalar|null, // The unix socket to use for MySQL
+ *             persistent?: bool, // True to use as persistent connection for the ibm_db2 driver
+ *             protocol?: scalar|null, // The protocol to use for the ibm_db2 driver (default to TCPIP if omitted)
+ *             service?: bool, // True to use SERVICE_NAME as connection parameter instead of SID for Oracle
+ *             servicename?: scalar|null, // Overrules dbname parameter if given and used as SERVICE_NAME or SID connection parameter for Oracle depending on the service parameter.
+ *             sessionMode?: scalar|null, // The session mode to use for the oci8 driver
+ *             server?: scalar|null, // The name of a running database server to connect to for SQL Anywhere.
+ *             default_dbname?: scalar|null, // Override the default database (postgres) to connect to for PostgreSQL connexion.
+ *             sslmode?: scalar|null, // Determines whether or with what priority a SSL TCP/IP connection will be negotiated with the server for PostgreSQL.
+ *             sslrootcert?: scalar|null, // The name of a file containing SSL certificate authority (CA) certificate(s). If the file exists, the server's certificate will be verified to be signed by one of these authorities.
+ *             sslcert?: scalar|null, // The path to the SSL client certificate file for PostgreSQL.
+ *             sslkey?: scalar|null, // The path to the SSL client key file for PostgreSQL.
+ *             sslcrl?: scalar|null, // The file name of the SSL certificate revocation list for PostgreSQL.
+ *             pooled?: bool, // True to use a pooled server with the oci8/pdo_oracle driver
+ *             MultipleActiveResultSets?: bool, // Configuring MultipleActiveResultSets for the pdo_sqlsrv driver
+ *             instancename?: scalar|null, // Optional parameter, complete whether to add the INSTANCE_NAME parameter in the connection. It is generally used to connect to an Oracle RAC server to select the name of a particular instance.
+ *             connectstring?: scalar|null, // Complete Easy Connect connection descriptor, see https://docs.oracle.com/database/121/NETAG/naming.htm.When using this option, you will still need to provide the user and password parameters, but the other parameters will no longer be used. Note that when using this parameter, the getHost and getPort methods from Doctrine\DBAL\Connection will no longer function as expected.
+ *             driver?: scalar|null, // Default: "pdo_mysql"
+ *             auto_commit?: bool,
+ *             schema_filter?: scalar|null,
+ *             logging?: bool, // Default: true
+ *             profiling?: bool, // Default: true
+ *             profiling_collect_backtrace?: bool, // Enables collecting backtraces when profiling is enabled // Default: false
+ *             profiling_collect_schema_errors?: bool, // Enables collecting schema errors when profiling is enabled // Default: true
+ *             server_version?: scalar|null,
+ *             idle_connection_ttl?: int, // Default: 600
+ *             driver_class?: scalar|null,
+ *             wrapper_class?: scalar|null,
+ *             keep_replica?: bool,
+ *             options?: array<string, mixed>,
+ *             mapping_types?: array<string, scalar|null>,
+ *             default_table_options?: array<string, scalar|null>,
+ *             schema_manager_factory?: scalar|null, // Default: "doctrine.dbal.default_schema_manager_factory"
+ *             result_cache?: scalar|null,
+ *             replicas?: array<string, array{ // Default: []
+ *                 url?: scalar|null, // A URL with connection information; any parameter value parsed from this string will override explicitly set parameters
+ *                 dbname?: scalar|null,
+ *                 host?: scalar|null, // Defaults to "localhost" at runtime.
+ *                 port?: scalar|null, // Defaults to null at runtime.
+ *                 user?: scalar|null, // Defaults to "root" at runtime.
+ *                 password?: scalar|null, // Defaults to null at runtime.
+ *                 dbname_suffix?: scalar|null, // Adds the given suffix to the configured database name, this option has no effects for the SQLite platform
+ *                 application_name?: scalar|null,
+ *                 charset?: scalar|null,
+ *                 path?: scalar|null,
+ *                 memory?: bool,
+ *                 unix_socket?: scalar|null, // The unix socket to use for MySQL
+ *                 persistent?: bool, // True to use as persistent connection for the ibm_db2 driver
+ *                 protocol?: scalar|null, // The protocol to use for the ibm_db2 driver (default to TCPIP if omitted)
+ *                 service?: bool, // True to use SERVICE_NAME as connection parameter instead of SID for Oracle
+ *                 servicename?: scalar|null, // Overrules dbname parameter if given and used as SERVICE_NAME or SID connection parameter for Oracle depending on the service parameter.
+ *                 sessionMode?: scalar|null, // The session mode to use for the oci8 driver
+ *                 server?: scalar|null, // The name of a running database server to connect to for SQL Anywhere.
+ *                 default_dbname?: scalar|null, // Override the default database (postgres) to connect to for PostgreSQL connexion.
+ *                 sslmode?: scalar|null, // Determines whether or with what priority a SSL TCP/IP connection will be negotiated with the server for PostgreSQL.
+ *                 sslrootcert?: scalar|null, // The name of a file containing SSL certificate authority (CA) certificate(s). If the file exists, the server's certificate will be verified to be signed by one of these authorities.
+ *                 sslcert?: scalar|null, // The path to the SSL client certificate file for PostgreSQL.
+ *                 sslkey?: scalar|null, // The path to the SSL client key file for PostgreSQL.
+ *                 sslcrl?: scalar|null, // The file name of the SSL certificate revocation list for PostgreSQL.
+ *                 pooled?: bool, // True to use a pooled server with the oci8/pdo_oracle driver
+ *                 MultipleActiveResultSets?: bool, // Configuring MultipleActiveResultSets for the pdo_sqlsrv driver
+ *                 instancename?: scalar|null, // Optional parameter, complete whether to add the INSTANCE_NAME parameter in the connection. It is generally used to connect to an Oracle RAC server to select the name of a particular instance.
+ *                 connectstring?: scalar|null, // Complete Easy Connect connection descriptor, see https://docs.oracle.com/database/121/NETAG/naming.htm.When using this option, you will still need to provide the user and password parameters, but the other parameters will no longer be used. Note that when using this parameter, the getHost and getPort methods from Doctrine\DBAL\Connection will no longer function as expected.
+ *             }>,
+ *         }>,
+ *     },
+ *     orm?: array{
+ *         default_entity_manager?: scalar|null,
+ *         enable_native_lazy_objects?: bool, // Deprecated: The "enable_native_lazy_objects" option is deprecated and will be removed in DoctrineBundle 4.0, as native lazy objects are now always enabled. // Default: true
+ *         controller_resolver?: bool|array{
+ *             enabled?: bool, // Default: true
+ *             auto_mapping?: bool, // Deprecated: The "doctrine.orm.controller_resolver.auto_mapping.auto_mapping" option is deprecated and will be removed in DoctrineBundle 4.0, as it only accepts `false` since 3.0. // Set to true to enable using route placeholders as lookup criteria when the primary key doesn't match the argument name // Default: false
+ *             evict_cache?: bool, // Set to true to fetch the entity from the database instead of using the cache, if any // Default: false
+ *         },
+ *         entity_managers?: array<string, array{ // Default: []
+ *             query_cache_driver?: string|array{
+ *                 type?: scalar|null, // Default: null
+ *                 id?: scalar|null,
+ *                 pool?: scalar|null,
+ *             },
+ *             metadata_cache_driver?: string|array{
+ *                 type?: scalar|null, // Default: null
+ *                 id?: scalar|null,
+ *                 pool?: scalar|null,
+ *             },
+ *             result_cache_driver?: string|array{
+ *                 type?: scalar|null, // Default: null
+ *                 id?: scalar|null,
+ *                 pool?: scalar|null,
+ *             },
+ *             entity_listeners?: array{
+ *                 entities?: array<string, array{ // Default: []
+ *                     listeners?: array<string, array{ // Default: []
+ *                         events?: list<array{ // Default: []
+ *                             type?: scalar|null,
+ *                             method?: scalar|null, // Default: null
+ *                         }>,
+ *                     }>,
+ *                 }>,
+ *             },
+ *             connection?: scalar|null,
+ *             class_metadata_factory_name?: scalar|null, // Default: "Doctrine\\ORM\\Mapping\\ClassMetadataFactory"
+ *             default_repository_class?: scalar|null, // Default: "Doctrine\\ORM\\EntityRepository"
+ *             auto_mapping?: scalar|null, // Default: false
+ *             naming_strategy?: scalar|null, // Default: "doctrine.orm.naming_strategy.default"
+ *             quote_strategy?: scalar|null, // Default: "doctrine.orm.quote_strategy.default"
+ *             typed_field_mapper?: scalar|null, // Default: "doctrine.orm.typed_field_mapper.default"
+ *             entity_listener_resolver?: scalar|null, // Default: null
+ *             fetch_mode_subselect_batch_size?: scalar|null,
+ *             repository_factory?: scalar|null, // Default: "doctrine.orm.container_repository_factory"
+ *             schema_ignore_classes?: list<scalar|null>,
+ *             validate_xml_mapping?: bool, // Set to "true" to opt-in to the new mapping driver mode that was added in Doctrine ORM 2.14 and will be mandatory in ORM 3.0. See https://github.com/doctrine/orm/pull/6728. // Default: false
+ *             second_level_cache?: array{
+ *                 region_cache_driver?: string|array{
+ *                     type?: scalar|null, // Default: null
+ *                     id?: scalar|null,
+ *                     pool?: scalar|null,
+ *                 },
+ *                 region_lock_lifetime?: scalar|null, // Default: 60
+ *                 log_enabled?: bool, // Default: true
+ *                 region_lifetime?: scalar|null, // Default: 3600
+ *                 enabled?: bool, // Default: true
+ *                 factory?: scalar|null,
+ *                 regions?: array<string, array{ // Default: []
+ *                     cache_driver?: string|array{
+ *                         type?: scalar|null, // Default: null
+ *                         id?: scalar|null,
+ *                         pool?: scalar|null,
+ *                     },
+ *                     lock_path?: scalar|null, // Default: "%kernel.cache_dir%/doctrine/orm/slc/filelock"
+ *                     lock_lifetime?: scalar|null, // Default: 60
+ *                     type?: scalar|null, // Default: "default"
+ *                     lifetime?: scalar|null, // Default: 0
+ *                     service?: scalar|null,
+ *                     name?: scalar|null,
+ *                 }>,
+ *                 loggers?: array<string, array{ // Default: []
+ *                     name?: scalar|null,
+ *                     service?: scalar|null,
+ *                 }>,
+ *             },
+ *             hydrators?: array<string, scalar|null>,
+ *             mappings?: array<string, bool|string|array{ // Default: []
+ *                 mapping?: scalar|null, // Default: true
+ *                 type?: scalar|null,
+ *                 dir?: scalar|null,
+ *                 alias?: scalar|null,
+ *                 prefix?: scalar|null,
+ *                 is_bundle?: bool,
+ *             }>,
+ *             dql?: array{
+ *                 string_functions?: array<string, scalar|null>,
+ *                 numeric_functions?: array<string, scalar|null>,
+ *                 datetime_functions?: array<string, scalar|null>,
+ *             },
+ *             filters?: array<string, string|array{ // Default: []
+ *                 class: scalar|null,
+ *                 enabled?: bool, // Default: false
+ *                 parameters?: array<string, mixed>,
+ *             }>,
+ *             identity_generation_preferences?: array<string, scalar|null>,
+ *         }>,
+ *         resolve_target_entities?: array<string, scalar|null>,
+ *     },
+ * }
+ * @psalm-type DoctrineMigrationsConfig = array{
+ *     enable_service_migrations?: bool, // Whether to enable fetching migrations from the service container. // Default: false
+ *     migrations_paths?: array<string, scalar|null>,
+ *     services?: array<string, scalar|null>,
+ *     factories?: array<string, scalar|null>,
+ *     storage?: array{ // Storage to use for migration status metadata.
+ *         table_storage?: array{ // The default metadata storage, implemented as a table in the database.
+ *             table_name?: scalar|null, // Default: null
+ *             version_column_name?: scalar|null, // Default: null
+ *             version_column_length?: scalar|null, // Default: null
+ *             executed_at_column_name?: scalar|null, // Default: null
+ *             execution_time_column_name?: scalar|null, // Default: null
+ *         },
+ *     },
+ *     migrations?: list<scalar|null>,
+ *     connection?: scalar|null, // Connection name to use for the migrations database. // Default: null
+ *     em?: scalar|null, // Entity manager name to use for the migrations database (available when doctrine/orm is installed). // Default: null
+ *     all_or_nothing?: scalar|null, // Run all migrations in a transaction. // Default: false
+ *     check_database_platform?: scalar|null, // Adds an extra check in the generated migrations to allow execution only on the same platform as they were initially generated on. // Default: true
+ *     custom_template?: scalar|null, // Custom template path for generated migration classes. // Default: null
+ *     organize_migrations?: scalar|null, // Organize migrations mode. Possible values are: "BY_YEAR", "BY_YEAR_AND_MONTH", false // Default: false
+ *     enable_profiler?: bool, // Whether or not to enable the profiler collector to calculate and visualize migration status. This adds some queries overhead. // Default: false
+ *     transactional?: bool, // Whether or not to wrap migrations in a single transaction. // Default: true
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
  *     services?: ServicesConfig,
  *     framework?: FrameworkConfig,
+ *     doctrine?: DoctrineConfig,
+ *     doctrine_migrations?: DoctrineMigrationsConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
  *         services?: ServicesConfig,
  *         framework?: FrameworkConfig,
+ *         doctrine?: DoctrineConfig,
+ *         doctrine_migrations?: DoctrineMigrationsConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
  *         services?: ServicesConfig,
  *         framework?: FrameworkConfig,
+ *         doctrine?: DoctrineConfig,
+ *         doctrine_migrations?: DoctrineMigrationsConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
  *         services?: ServicesConfig,
  *         framework?: FrameworkConfig,
+ *         doctrine?: DoctrineConfig,
+ *         doctrine_migrations?: DoctrineMigrationsConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
