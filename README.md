@@ -4,6 +4,8 @@
 A simple mockup that demonstrates AR24 integration in a modern PHP/Symfony application context.
 
 - Created using the Symfony Docker template (https://github.com/dunglas/symfony-docker). 
+- Added Symfony CLI in Dockerfile for local development convenience (https://symfony.com/download).
+- Started with Symfony 8.0 skeleton (https://symfony.com/doc/current/setup.html).
 
 ## Getting Started
 
