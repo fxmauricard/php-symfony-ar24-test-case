@@ -30,6 +30,7 @@ RUN set -eux; \
 		intl \
 		opcache \
 		zip \
+		xml \
 	;
 
 # Install Symfony CLI (https://symfony.com/download)
