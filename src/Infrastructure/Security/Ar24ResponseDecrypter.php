@@ -2,17 +2,32 @@
 
 namespace App\Infrastructure\Security;
 
-use Exception;
+use App\Infrastructure\Http\Client\Exception\Ar24ApiException;
 use Symfony\Component\String\UnicodeString;
 
+/**
+ * Decrypts responses from the AR24 API.
+ */
 final readonly class Ar24ResponseDecrypter
 {
+    /**
+     * Constructor.
+     *
+     * @param string $privateKey The private key used for decryption.
+     */
     public function __construct(
         private string $privateKey,
     ) {}
 
     /**
-     * @throws Exception
+     * Decrypts the AR24 response.
+     *
+     * @param string $encrypted Base64-encoded encrypted value.
+     * @param string $date      Date provided by the API used to derive the key.
+     *
+     * @return string Decrypted plaintext.
+     *
+     * @throws Ar24ApiException If decryption fails.
      */
     public function decryptResponse(string $encrypted, string $date): string
     {
@@ -27,7 +42,7 @@ final readonly class Ar24ResponseDecrypter
         $decrypted = openssl_decrypt($encrypted, 'aes-256-cbc', $key, false, $iv);
 
         if (false === $decrypted) {
-            throw new Exception('Unable to decrypt AR24 response.');
+            throw new Ar24ApiException('invalid_response', 'Unable to decrypt AR24 response.');
         }
 
         return $decrypted;

@@ -4,8 +4,17 @@ namespace App\Infrastructure\Security;
 
 use Symfony\Component\String\UnicodeString;
 
+
+/**
+ * Factory for generating AR24 API request headers.
+ */
 final readonly class Ar24HeadersFactory
 {
+   /**
+     * Constructor.
+     *
+     * @param string $privateKey The private key used for signature generation.
+     */
     public function __construct(
         private string $privateKey,
     ) {}
