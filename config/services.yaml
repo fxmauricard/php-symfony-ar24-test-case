@@ -19,5 +19,18 @@ services:
     App\:
         resource: '../src/'
 
+    App\Infrastructure\Http\Client\Ar24ApiClient:
+        arguments:
+            $baseUrl: '%env(AR24_BASE_URL)%'
+            $token: '%env(AR24_TOKEN)%'
+
+    App\Infrastructure\Security\Ar24ResponseDecrypter:
+        arguments:
+            $privateKey: '%env(AR24_PRIVATE_KEY)%'
+
+    App\Infrastructure\Security\Ar24HeadersFactory:
+        arguments:
+            $privateKey: '%env(AR24_PRIVATE_KEY)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
