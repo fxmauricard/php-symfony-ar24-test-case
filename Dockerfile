@@ -28,7 +28,9 @@ RUN set -eux; \
 		@composer \
 		apcu \
 		intl \
+		mbstring \
 		opcache \
+		openssl \
 		zip \
 		xml \
 	;
