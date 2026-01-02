@@ -3,14 +3,17 @@
 namespace App\Infrastructure\Http\User\Model;
 
 use App\Infrastructure\Http\User\Enum\Ar24UserStatut;
+use DateTimeImmutable;
 
 /**
  * Model representing a user for the AR24 API.
  */
 class Ar24User
 {
+    private ?int $id = null;
     private ?string $firstname = null;
     private ?string $lastname = null;
+    private ?string $name = null;
     private ?string $email = null;
     private ?string $gender = null;
     private ?Ar24UserStatut $statut = null;
@@ -37,6 +40,16 @@ class Ar24User
     private ?bool $notifyWaitingArAnswer = null;
     private ?bool $isLegalEntity = null;
     private ?string $customRef = null;
+    private ?string $companyActivity = null;
+    private ?string $cPhone = null;
+    private ?string $cMobile = null;
+    private ?bool $notifyDp = null;
+    private ?bool $paymentActive = null;
+    private ?string $billingTva = null;
+    private ?DateTimeImmutable $creation = null;
+    private ?bool $notifCgu = null;
+    private ?bool $notifProfilUncomplete = null;
+    private ?bool $isPaymentPossible = null;
 
     /**
      * Get the user's first name.
@@ -707,6 +720,294 @@ class Ar24User
     public function setCustomRef(?string $customRef): self
     {
         $this->customRef = $customRef;
+        return $this;
+    }
+
+    /**
+     * Get the user's ID.
+     * AR24 field: id (int).
+     *
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the user's ID.
+     * AR24 field: id (int).
+     *
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Get the user's full name.
+     * AR24 field: name (string).
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the user's full name.
+     * AR24 field: name (string).
+     *
+     * @param string|null $name
+     * @return $this
+     */
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get the company activity type.
+     * AR24 field: company_activity (string).
+     *
+     * @return string|null
+     */
+    public function getCompanyActivity(): ?string
+    {
+        return $this->companyActivity;
+    }
+
+    /**
+     * Set the company activity type.
+     * AR24 field: company_activity (string).
+     *
+     * @param string|null $companyActivity
+     * @return $this
+     */
+    public function setCompanyActivity(?string $companyActivity): self
+    {
+        $this->companyActivity = $companyActivity;
+        return $this;
+    }
+
+    /**
+     * Get the contact phone number.
+     * AR24 field: c_phone (string).
+     *
+     * @return string|null
+     */
+    public function getCPhone(): ?string
+    {
+        return $this->cPhone;
+    }
+
+    /**
+     * Set the contact phone number.
+     * AR24 field: c_phone (string).
+     *
+     * @param string|null $cPhone
+     * @return $this
+     */
+    public function setCPhone(?string $cPhone): self
+    {
+        $this->cPhone = $cPhone;
+        return $this;
+    }
+
+    /**
+     * Get the contact mobile number.
+     * AR24 field: c_mobile (string).
+     *
+     * @return string|null
+     */
+    public function getCMobile(): ?string
+    {
+        return $this->cMobile;
+    }
+
+    /**
+     * Set the contact mobile number.
+     * AR24 field: c_mobile (string).
+     *
+     * @param string|null $cMobile
+     * @return $this
+     */
+    public function setCMobile(?string $cMobile): self
+    {
+        $this->cMobile = $cMobile;
+        return $this;
+    }
+
+    /**
+     * Whether the user wants document notifications.
+     * AR24 field: notify_dp (bool).
+     *
+     * @return bool|null
+     */
+    public function isNotifyDp(): ?bool
+    {
+        return $this->notifyDp;
+    }
+
+    /**
+     * Enable or disable document notifications for the user.
+     * AR24 field: notify_dp (bool).
+     *
+     * @param bool|null $notifyDp
+     * @return $this
+     */
+    public function setNotifyDp(?bool $notifyDp): self
+    {
+        $this->notifyDp = $notifyDp;
+        return $this;
+    }
+
+    /**
+     * Whether the payment is active for the user.
+     * AR24 field: payment_active (bool).
+     *
+     * @return bool|null
+     */
+    public function isPaymentActive(): ?bool
+    {
+        return $this->paymentActive;
+    }
+
+    /**
+     * Set the payment active state for the user.
+     * AR24 field: payment_active (bool).
+     *
+     * @param bool|null $paymentActive
+     * @return $this
+     */
+    public function setPaymentActive(?bool $paymentActive): self
+    {
+        $this->paymentActive = $paymentActive;
+        return $this;
+    }
+
+    /**
+     * Get the billing VAT number.
+     * AR24 field: billing_tva (string).
+     *
+     * @return string|null
+     */
+    public function getBillingTva(): ?string
+    {
+        return $this->billingTva;
+    }
+
+    /**
+     * Set the billing VAT number.
+     * AR24 field: billing_tva (string).
+     *
+     * @param string|null $billingTva
+     * @return $this
+     */
+    public function setBillingTva(?string $billingTva): self
+    {
+        $this->billingTva = $billingTva;
+        return $this;
+    }
+
+    /**
+     * Get the account creation date.
+     * AR24 field: creation (datetime).
+     *
+     * @return DateTimeImmutable|null
+     */
+    public function getCreation(): ?DateTimeImmutable
+    {
+        return $this->creation;
+    }
+
+    /**
+     * Set the account creation date.
+     * AR24 field: creation (datetime).
+     *
+     * @param DateTimeImmutable|null $creation
+     * @return $this
+     */
+    public function setCreation(?DateTimeImmutable $creation): self
+    {
+        $this->creation = $creation;
+        return $this;
+    }
+
+    /**
+     * Whether the user wants to be notified about T&C updates.
+     * AR24 field: notif_cgu (bool).
+     *
+     * @return bool|null
+     */
+    public function isNotifCgu(): ?bool
+    {
+        return $this->notifCgu;
+    }
+
+    /**
+     * Enable or disable notifications for T&C updates.
+     * AR24 field: notif_cgu (bool).
+     *
+     * @param bool|null $notifCgu
+     * @return $this
+     */
+    public function setNotifCgu(?bool $notifCgu): self
+    {
+        $this->notifCgu = $notifCgu;
+        return $this;
+    }
+
+    /**
+     * Whether the user wants to be notified when their profile is incomplete.
+     * AR24 field: notif_profil_uncomplete (bool).
+     *
+     * @return bool|null
+     */
+    public function isNotifProfilUncomplete(): ?bool
+    {
+        return $this->notifProfilUncomplete;
+    }
+
+    /**
+     * Enable or disable notifications for incomplete profile.
+     * AR24 field: notif_profil_uncomplete (bool).
+     *
+     * @param bool|null $notifProfilUncomplete
+     * @return $this
+     */
+    public function setNotifProfilUncomplete(?bool $notifProfilUncomplete): self
+    {
+        $this->notifProfilUncomplete = $notifProfilUncomplete;
+        return $this;
+    }
+
+    /**
+     * Whether payment is possible for the user.
+     * AR24 field: is_payment_possible (bool).
+     *
+     * @return bool|null
+     */
+    public function isPaymentPossible(): ?bool
+    {
+        return $this->isPaymentPossible;
+    }
+
+    /**
+     * Set whether payment is possible for the user.
+     * AR24 field: is_payment_possible (bool).
+     *
+     * @param bool|null $isPaymentPossible
+     * @return $this
+     */
+    public function setPaymentPossible(?bool $isPaymentPossible): self
+    {
+        $this->isPaymentPossible = $isPaymentPossible;
         return $this;
     }
 }

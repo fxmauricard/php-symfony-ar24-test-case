@@ -17,7 +17,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * Client for interacting with the AR24 API.
  */
-final class Ar24ApiClient
+class Ar24ApiClient
 {
     /**
      * Default error map for handling common AR24 API errors.
@@ -26,7 +26,6 @@ final class Ar24ApiClient
      */
     private const array DEFAULT_ERROR_MAP = [
         'unknown_error' => [Ar24ApiException::class, 'An unknown error occurred'],
-        'status_invalid' => [Ar24ApiException::class, 'The status parameter is not valid'],
         'token_invalid' => [Ar24TokenException::class, 'Your token is not valid'],
         'token_missing' => [Ar24TokenException::class, 'The token is missing in your request'],
         'empty_date' => [Ar24DateException::class, 'No date parameter found in your request'],
@@ -83,23 +82,29 @@ final class Ar24ApiClient
     private function request(string $method, string $endpoint, array $options = [], array $errorMap = []): array
     {
         $date = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'))->format('Y-m-d H:i:s');
+        $authentication = [
+            'token' => $this->token, // AR24 API token.
+            'date' => $date, // Date needed for decrypting API response.
+        ];
 
         // Build headers and request options.
         $headers = $this->headersFactory->buildHeaders($date);
         $requestOptions = [
             ...$options,
             'headers' => array_merge($headers, $options['headers'] ?? []),
-            'query' => array_merge([
-                'token' => $this->token, // AR24 API token.
-                'date' => $date, // Date needed for decrypting API response.
-            ], $options['query'] ?? []),
             'timeout' => $options['timeout'] ?? 60, // AR24 API timeout is 60 seconds.
         ];
 
+        // Add authentication parameters to query or body based on the HTTP method.
+        $key = strtoupper($method) === 'GET' ? 'query' : 'body';
+        $requestOptions[$key] = array_merge($authentication, $options[$key] ?? []);
+
         // Log and send the request.
         $loggedOptions = $requestOptions;
-        if (isset($loggedOptions['query']['token'])) {
-            $loggedOptions['query']['token'] = '***'; // Mask sensitive info for logging.
+        foreach (['query', 'body'] as $key) {
+            if (isset($loggedOptions[$key]['token'])) {
+                $loggedOptions[$key]['token'] = '***'; // Mask sensitive info for logging.
+            }
         }
         $this->logger->info('AR24 API Request', [
             'method' => $method,
@@ -169,7 +174,10 @@ final class Ar24ApiClient
     private function handleError(array $content, array $errorMap = []): void
     {
         $fullErrorMap = array_merge(self::DEFAULT_ERROR_MAP, $errorMap);
-        $errorCode = $fullErrorMap[$content['slug'] ?? 'unknown_error'] ?? 'unknown_error';
+        $errorCode = array_key_exists($content['slug'] ?? null, $fullErrorMap)
+            ? $content['slug']
+            : 'unknown_error'
+        ;
 
         [$exceptionClass, $message] = $fullErrorMap[$errorCode];
         throw new $exceptionClass($errorCode, $message);
@@ -178,7 +186,7 @@ final class Ar24ApiClient
     /**
      * Sends a GET request to the specified URL with the provided options.
      *
-     * @param string $url The URL to send the GET request to.
+     * @param string $endpoint The endpoint path to send the GET request to.
      * @param array $options An array of options to customize the request.
      * @param array $errorMap A map of error codes to [ExceptionClass, Message].
      *
@@ -186,15 +194,15 @@ final class Ar24ApiClient
      *
      * @throws Ar24ApiException
      */
-    public function get(string $url, array $options = [], array $errorMap = []): array
+    public function get(string $endpoint, array $options = [], array $errorMap = []): array
     {
-        return $this->request('GET', $url, $options, $errorMap);
+        return $this->request('GET', $endpoint, $options, $errorMap);
     }
 
     /**
      * Sends a POST request to the specified URL with the given options.
      *
-     * @param string $url The URL to send the POST request to.
+     * @param string $endpoint The endpoint path to send the POST request to.
      * @param array $options Optional parameters to customize the request.
      * @param array $errorMap A map of error codes to [ExceptionClass, Message].
      *
@@ -202,8 +210,8 @@ final class Ar24ApiClient
      *
      * @throws Ar24ApiException
      */
-    public function post(string $url, array $options = [], array $errorMap = []): array
+    public function post(string $endpoint, array $options = [], array $errorMap = []): array
     {
-        return $this->request('POST', $url, $options, $errorMap);
+        return $this->request('POST', $endpoint, $options, $errorMap);
     }
 }

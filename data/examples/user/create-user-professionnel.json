@@ -1,0 +1,28 @@
+{
+  "firstname": "Hugo",
+  "lastname": "Dupont",
+  "email": "example@example.com",
+  "country": "FR",
+  "address1": "1 rue de la république",
+  "statut": "professionnel",
+  "company": "ABC SAS",
+  "city": "Paris",
+  "zipcode": "75000",
+  "gender": "F",
+  "password": "{{Password}}",
+  "company_siret": "123456",
+  "company_tva": "123456",
+  "address2": "Batiment B",
+  "confirmed": "0",
+  "billing_email": "facturation@example.com",
+  "notify_ev": "1",
+  "notify_ar": "1",
+  "notify_ng": "1",
+  "notify_consent": "1",
+  "notify_eidas_to_valid": "1",
+  "notify_recipient_update": "1",
+  "notify_waiting_ar_answer": "1",
+  "is_legal_entity": "0",
+  "custom_ref": "REF-001"
+}
+
