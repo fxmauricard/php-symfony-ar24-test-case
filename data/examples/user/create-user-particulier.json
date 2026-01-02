@@ -1,0 +1,14 @@
+{
+    "firstname": "Hugo",
+    "lastname": "Dupont",
+    "email": "example@example.com",
+    "gender": "M",
+    "statut": "particulier",
+    "country": "FR",
+    "address1": "1 rue de la république",
+    "address2": "Batiment B",
+    "zipcode": "75000",
+    "city": "Paris",
+    "password": "{{Password}}",
+    "custom_ref": "REF-001"
+}
