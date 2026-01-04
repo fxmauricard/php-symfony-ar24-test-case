@@ -125,7 +125,7 @@ final readonly class Ar24UserClient
             'missing_company_siret' => [Ar24UserException::class, 'Please specify an company_siret (Required for a user in FR)'],
             'missing_company_tva' => [Ar24UserException::class, ' specify an company_tva (Required for a user in EU)'],
             'error_company_siret' => [Ar24UserException::class, 'Please specify a valid company_siret (No company has been found with this company_siret)'],
-            'user_not_created' => [Ar24UserException::class, 'An error occured'],
+            'user_not_created' => [Ar24UserException::class, 'An error occurred'],
             'user_unavailable' => [Ar24UserException::class, 'You tried to access a resource that is not related to your API (user has not granted API access)'],
         ]);
 

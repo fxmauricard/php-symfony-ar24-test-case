@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Ar24\User;
 
 use App\Infrastructure\Http\User\Ar24UserClient;
 use App\Infrastructure\Http\User\DataTransformer\Ar24UserDataTransformer;
@@ -18,10 +18,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Command to list all AR24 users.
  */
-readonly class Ar24UserListCommand
+readonly class ListCommand
 {
     public function __construct(
-        private Ar24UserClient          $userClient,
+        private Ar24UserClient          $client,
         private Ar24UserDataTransformer $transformer,
     ) {
     }
@@ -36,7 +36,7 @@ readonly class Ar24UserListCommand
         $io->title('Listing AR24 users');
 
         try {
-            $users = $this->userClient->list();
+            $users = $this->client->list();
 
             if (empty($users)) {
                 $io->warning('No users found.');

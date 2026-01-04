@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Ar24\User;
 
 use App\Infrastructure\Http\User\Ar24UserClient;
 use App\Infrastructure\Http\User\DataTransformer\Ar24UserDataTransformer;
@@ -16,10 +16,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'ar24:user:create',
     description: 'Create an AR24 user from a JSON file',
 )]
-readonly class Ar24UserCreateCommand
+/**
+ * Command to create an AR24 user.
+ */
+readonly class CreateCommand
 {
     public function __construct(
-        private Ar24UserClient          $userClient,
+        private Ar24UserClient          $client,
         private Ar24UserDataTransformer $transformer,
     ) {
     }
@@ -51,7 +54,7 @@ readonly class Ar24UserCreateCommand
 
         try {
             $user = $this->transformer->reverseTransform($data);
-            $createdUser = $this->userClient->create($user);
+            $createdUser = $this->client->create($user);
             $createdUserData = $this->transformer->transform($createdUser);
 
             $io->success('User created successfully');
@@ -67,4 +70,3 @@ readonly class Ar24UserCreateCommand
         return Command::SUCCESS;
     }
 }
-

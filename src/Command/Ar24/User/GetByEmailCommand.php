@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Ar24\User;
 
 use App\Infrastructure\Http\User\Ar24UserClient;
 use App\Infrastructure\Http\User\DataTransformer\Ar24UserDataTransformer;
@@ -19,10 +19,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Command to retrieve an AR24 user by his email.
  */
-readonly class Ar24UserGetByEmailCommand
+readonly class GetByEmailCommand
 {
     public function __construct(
-        private Ar24UserClient          $userClient,
+        private Ar24UserClient          $client,
         private Ar24UserDataTransformer $transformer,
     ) {
     }
@@ -38,7 +38,7 @@ readonly class Ar24UserGetByEmailCommand
         $io->title(sprintf('Retrieving AR24 user for email: %s', $email));
 
         try {
-            $user = $this->userClient->getByEmail($email);
+            $user = $this->client->getByEmail($email);
             $userData = $this->transformer->transform($user);
             
             $io->success('User found!');
