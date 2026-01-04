@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Ar24\User;
 
 use App\Infrastructure\Http\User\Ar24UserClient;
 use App\Infrastructure\Http\User\DataTransformer\Ar24UserDataTransformer;
@@ -19,18 +19,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Command to retrieve an AR24 user by his ID.
  */
-readonly class Ar24UserGetByIdCommand
+readonly class GetByIdCommand
 {
     public function __construct(
-        private Ar24UserClient          $userClient,
+        private Ar24UserClient          $client,
         private Ar24UserDataTransformer $transformer,
     ) {
     }
 
     public function __invoke(
-        InputInterface                                                    $input,
-        OutputInterface                                                   $output,
-        #[Argument(description: 'The ID of the user to retrieve')] string $id
+        InputInterface                                                  $input,
+        OutputInterface                                                 $output,
+        #[Argument(description: 'The ID of the user to retrieve')] int  $id
     ): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -38,7 +38,7 @@ readonly class Ar24UserGetByIdCommand
         $io->title(sprintf('Retrieving AR24 user for ID: %s', $id));
 
         try {
-            $user = $this->userClient->getById($id);
+            $user = $this->client->getById($id);
             $userData = $this->transformer->transform($user);
 
             $io->success('User found!');
