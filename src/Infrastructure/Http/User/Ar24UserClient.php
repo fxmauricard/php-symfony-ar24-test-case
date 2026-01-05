@@ -5,7 +5,7 @@ namespace App\Infrastructure\Http\User;
 use App\Infrastructure\Http\Client\Ar24ApiClient;
 use App\Infrastructure\Http\Client\Enum\Ar24Sort;
 use App\Infrastructure\Http\Client\Exception\Ar24ApiException;
-use App\Infrastructure\Http\User\DataTransformer\Ar24UserDataTransformer;
+use App\Infrastructure\Http\Common\DataTransformer\AutomaticTransformer;
 use App\Infrastructure\Http\User\Exception\Ar24UserException;
 use App\Infrastructure\Http\User\Model\Ar24User;
 
@@ -19,7 +19,7 @@ final readonly class Ar24UserClient
      */
     public function __construct(
         private Ar24ApiClient $client,
-        private Ar24UserDataTransformer $transformer,
+        private AutomaticTransformer $transformer,
     )
     {
     }
@@ -44,7 +44,7 @@ final readonly class Ar24UserClient
             'user_unavailable' => [Ar24UserException::class, 'You tried to access a resource that is not related to your API (user has not granted API access)'],
         ]);
 
-        return $this->transformer->reverseTransform($data['result'] ?? []);
+        return $this->transformer->reverseTransform($data['result'] ?? [], Ar24User::class);
     }
 
     /**
@@ -67,7 +67,7 @@ final readonly class Ar24UserClient
             'user_unavailable' => [Ar24UserException::class, 'You tried to access a resource that is not related to your API (user has not granted API access)'],
         ]);
 
-        return $this->transformer->reverseTransform($data['result'] ?? []);
+        return $this->transformer->reverseTransform($data['result'] ?? [], Ar24User::class);
     }
 
     /**
@@ -93,7 +93,7 @@ final readonly class Ar24UserClient
         $usersData = $data['result']['users'] ?? [];
 
         return array_map(
-            fn(array $userData) => $this->transformer->reverseTransform($userData),
+            fn(array $userData) => $this->transformer->reverseTransform($userData, Ar24User::class),
             $usersData
         );
     }
@@ -129,6 +129,6 @@ final readonly class Ar24UserClient
             'user_unavailable' => [Ar24UserException::class, 'You tried to access a resource that is not related to your API (user has not granted API access)'],
         ]);
 
-        return $this->transformer->reverseTransform($data['result'] ?? []);
+        return $this->transformer->reverseTransform($data['result'] ?? [], Ar24User::class);
     }
 }
