@@ -6,4 +6,5 @@ enum Ar24ResponseStatus: string
 {
     case ERROR = 'ERROR';
     case SUCCESS = 'SUCCESS';
+    case MAINTENANCE = 'maintenance';
 }

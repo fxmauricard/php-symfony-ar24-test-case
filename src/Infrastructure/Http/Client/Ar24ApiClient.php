@@ -133,14 +133,21 @@ class Ar24ApiClient
 
             // After the decryption attempt, ensure we finally have a decoded array.
             if (JSON_ERROR_NONE !== json_last_error() || !is_array($content)) {
-                throw new Ar24ApiException('invalid_response', 'Invalid or non-JSON response from AR24 API');
+                $message = 'Invalid or non-JSON response from AR24 API';
+                $this->logger->error($message);
+                throw new Ar24ApiException('invalid_response', $message);
             }
 
             $status = $content['status'] ?? null;
             $result = $content['result'] ?? '';
 
-            // Handle response based on status, if status is SUCCESS, return the decrypted content.
-            if (Ar24ResponseStatus::SUCCESS->value === $status) {
+            // Handle response based on status, if status is MAINTENANCE, throw a maintenance exception.
+            if (Ar24ResponseStatus::MAINTENANCE->value === $status) {
+                $message = 'AR24 API is in technical maintenance.';
+                $this->logger->error($message);
+                throw new Ar24ApiException('maintenance', $message);
+            // If status is SUCCESS, return the decrypted content.
+            } elseif (Ar24ResponseStatus::SUCCESS->value === $status) {
                 // Log decrypted response for successful requests.
                 $this->logger->debug('AR24 API Response (Decrypted)', [
                     'status' => $status,
@@ -153,12 +160,16 @@ class Ar24ApiClient
                 $this->handleError($content, $errorMap);
             // If status is neither SUCCESS nor ERROR, throw an unknown error exception.
             } else {
-                throw new Ar24ApiException('status_unknown', sprintf('The status parameter is not valid: %s', $status));
+                $message = sprintf('The status parameter is not valid: %s', $status);
+                $this->logger->error($message);
+                throw new Ar24ApiException('status_unknown', $message);
             }
         // In other cases, we throw an exception.
         } else {
             // Wrap non-200 responses into a domain exception containing status and body for easier handling.
-            throw new Ar24ApiException('http_' . $statusCode, sprintf('Unexpected HTTP status: %d. Body: %s', $statusCode, $rawContent));
+            $message = sprintf('Unexpected HTTP status: %d. Body: %s', $statusCode, $rawContent);
+            $this->logger->error($message);
+            throw new Ar24ApiException('http_' . $statusCode, $message);
         }
     }
 
@@ -180,6 +191,7 @@ class Ar24ApiClient
         ;
 
         [$exceptionClass, $message] = $fullErrorMap[$errorCode];
+        $this->logger->error(sprintf('AR24 API Error [%s]: %s', $errorCode, $message));
         throw new $exceptionClass($errorCode, $message);
     }
 
