@@ -2,8 +2,9 @@
 
 namespace App\Command\Ar24\User;
 
+use App\Infrastructure\Http\Common\DataTransformer\AutomaticTransformer;
 use App\Infrastructure\Http\User\Ar24UserClient;
-use App\Infrastructure\Http\User\DataTransformer\Ar24UserDataTransformer;
+use App\Infrastructure\Http\User\Model\Ar24User;
 use Exception;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,14 +24,14 @@ readonly class CreateCommand
 {
     public function __construct(
         private Ar24UserClient          $client,
-        private Ar24UserDataTransformer $transformer,
+        private AutomaticTransformer    $transformer,
     ) {
     }
 
     public function __invoke(
-        InputInterface                                                       $input,
-        OutputInterface                                                      $output,
-        #[Argument(description: 'Path to a JSON file describing the user')] string $jsonPath,
+        InputInterface                                                              $input,
+        OutputInterface                                                             $output,
+        #[Argument(description: 'Path to a JSON file describing the user')] string  $jsonPath,
     ): int {
         $io = new SymfonyStyle($input, $output);
         $io->title('Create AR24 user');
@@ -53,7 +54,7 @@ readonly class CreateCommand
         }
 
         try {
-            $user = $this->transformer->reverseTransform($data);
+            $user = $this->transformer->reverseTransform($data, Ar24User::class);
             $createdUser = $this->client->create($user);
             $createdUserData = $this->transformer->transform($createdUser);
 
