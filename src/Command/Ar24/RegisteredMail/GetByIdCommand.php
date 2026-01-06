@@ -2,8 +2,8 @@
 
 namespace App\Command\Ar24\RegisteredMail;
 
-use App\Infrastructure\Http\RegisteredMail\Ar24RegisteredMailClient;
-use App\Infrastructure\Http\RegisteredMail\DataTransformer\Ar24RegisteredMailDataTransformer;
+use App\Infrastructure\Ar24\Http\RegisteredMail\RegisteredMailClient;
+use App\Infrastructure\Ar24\Http\RegisteredMail\DataTransformer\RegisteredMailDataTransformer;
 use Exception;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,8 +22,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 readonly class GetByIdCommand
 {
     public function __construct(
-        private Ar24RegisteredMailClient          $client,
-        private Ar24RegisteredMailDataTransformer $transformer,
+        private RegisteredMailClient          $client,
+        private RegisteredMailDataTransformer $transformer,
     ) {
     }
 

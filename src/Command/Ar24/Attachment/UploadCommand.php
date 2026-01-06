@@ -2,7 +2,7 @@
 
 namespace App\Command\Ar24\Attachment;
 
-use App\Infrastructure\Http\Attachment\Ar24AttachmentClient;
+use App\Infrastructure\Ar24\Http\Attachment\AttachmentClient;
 use Exception;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 readonly class UploadCommand
 {
     public function __construct(
-        private Ar24AttachmentClient    $client,
+        private AttachmentClient $client,
     ) {
     }
 
