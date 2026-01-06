@@ -2,8 +2,8 @@
 
 namespace App\Command\Ar24\User;
 
-use App\Infrastructure\Http\Common\DataTransformer\AutomaticTransformer;
-use App\Infrastructure\Http\User\Ar24UserClient;
+use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
+use App\Infrastructure\Ar24\Http\User\UserClient;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -21,8 +21,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 readonly class ListCommand
 {
     public function __construct(
-        private Ar24UserClient          $client,
-        private AutomaticTransformer    $transformer,
+        private UserClient           $client,
+        private AutomaticTransformer $transformer,
     ) {
     }
 

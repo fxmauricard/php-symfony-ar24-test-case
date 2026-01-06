@@ -2,8 +2,8 @@
 
 namespace App\Command\Ar24\Attachment;
 
-use App\Infrastructure\Http\Attachment\Ar24AttachmentClient;
-use App\Infrastructure\Http\Common\DataTransformer\AutomaticTransformer;
+use App\Infrastructure\Ar24\Http\Attachment\AttachmentClient;
+use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
 use Exception;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,8 +22,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 readonly class ListByUserIdCommand
 {
     public function __construct(
-        private Ar24AttachmentClient    $client,
-        private AutomaticTransformer    $transformer,
+        private AttachmentClient     $client,
+        private AutomaticTransformer $transformer,
     ) {
     }
 
@@ -39,7 +39,6 @@ readonly class ListByUserIdCommand
 
         try {
             $attachments = $this->client->listByUserId($userId);
-            var_dump($attachments);
 
             if (empty($attachments)) {
                 $io->warning('No attachments found.');

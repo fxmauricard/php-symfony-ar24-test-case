@@ -2,9 +2,9 @@
 
 namespace App\Command\Ar24\User;
 
-use App\Infrastructure\Http\Common\DataTransformer\AutomaticTransformer;
-use App\Infrastructure\Http\User\Ar24UserClient;
-use App\Infrastructure\Http\User\Model\Ar24User;
+use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
+use App\Infrastructure\Ar24\Http\User\UserClient;
+use App\Infrastructure\Ar24\Http\User\Model\User;
 use Exception;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,8 +23,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 readonly class CreateCommand
 {
     public function __construct(
-        private Ar24UserClient          $client,
-        private AutomaticTransformer    $transformer,
+        private UserClient           $client,
+        private AutomaticTransformer $transformer,
     ) {
     }
 
@@ -54,7 +54,7 @@ readonly class CreateCommand
         }
 
         try {
-            $user = $this->transformer->reverseTransform($data, Ar24User::class);
+            $user = $this->transformer->reverseTransform($data, User::class);
             $createdUser = $this->client->create($user);
             $createdUserData = $this->transformer->transform($createdUser);
 
