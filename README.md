@@ -17,7 +17,17 @@ A simple mockup that demonstrates AR24 integration in a modern PHP/Symfony appli
 
 ## Features
 
-
+Implementetd these API-calls and added the according Symfony commandds:
+  * `ar24:attachment:list-by-registered-mail-id`  List all AR24 attachments for a mail
+  * `ar24:attachment:list-by-user-id`             List all AR24 attachments for a user
+  * `ar24:attachment:upload`                      Upload an AR24 attachment from a file
+  * `ar24:registered-mail:get-by-id`              Get an AR24 registered mail by ID
+  * `ar24:registered-mail:list`                   List all AR24 registered mails for a user
+  * `ar24:registered-mail:send`                   Send an AR24 registered mail from a JSON file
+  * `ar24:user:create`                            Create an AR24 user from a JSON file
+  * `ar24:user:get-by-email`                      Get an AR24 user by email
+  * `ar24:user:get-by-id`                         Get an AR24 user by ID
+  * `ar24:user:list`                              List all AR24 users
 
 ## License
 
