@@ -106,7 +106,7 @@ final readonly class AttachmentClient
         $attachmentsData = $data['result']['attachments'] ?? [];
 
         return array_map(
-        fn(array $attachmentData) => $this->transformer->reverseTransform($attachmentData, Attachment::class),
+            fn(array $attachmentData) => $this->transformer->reverseTransform($attachmentData, Attachment::class),
             $attachmentsData
         );
     }
