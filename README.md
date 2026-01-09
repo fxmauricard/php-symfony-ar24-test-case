@@ -12,12 +12,19 @@ A simple mockup that demonstrates AR24 integration in a modern PHP/Symfony appli
 1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+).
 2. Run `docker compose build --pull --no-cache` to build fresh images.
 3. Run `docker compose up --wait` to set up and start the application.
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+4. Run `docker compose exec php bash -c "php bin/console doctrine:fixtures:load"` to load domain entities fixtures.
+5. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
+6. Run `docker compose down --remove-orphans` to stop the Docker containers.
 
 ## Features
 
-Implementetd these API-calls and added the according Symfony commandds:
+- Added a simple domain "Test Case" that simulate a simple revaluation of the rent of a `Lease` contract, including the corresponding `Tenant`. AR24 integration is needed by the domain for the `RentRevaluationNotification` entity.
+
+
+- Domain entities are exposed as a REST API using API Platform (https://localhost/api).
+
+
+- Implemented these AR24 API-calls and added the according Symfony commands:
   * `ar24:attachment:list-by-registered-mail-id`  List all AR24 attachments for a mail
   * `ar24:attachment:list-by-user-id`             List all AR24 attachments for a user
   * `ar24:attachment:upload`                      Upload an AR24 attachment from a file
@@ -31,7 +38,7 @@ Implementetd these API-calls and added the according Symfony commandds:
 
 ## License
 
-AR24 Test Case is available under the GPL3 License.
+AR24 Test Case is available under the MIT license.
 
 ## Credits
 
