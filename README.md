@@ -5,7 +5,12 @@ A simple mockup that demonstrates AR24 integration in a modern PHP/Symfony appli
 
 - Created using the Symfony Docker template (https://github.com/dunglas/symfony-docker). 
 - Added Symfony CLI in Dockerfile for local development convenience (https://symfony.com/download).
-- Started with Symfony 8.0 skeleton (https://symfony.com/doc/current/setup.html).
+- Started with Symfony 8.0 skeleton (https://symfony.com/doc/current/setup.html). 
+- Symfony Maker Bundle is included for code generation (https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html).
+- Uses Doctrine ORM for database interactions (https://www.doctrine-project.org/projects/orm.html). 
+- Uses API Platform to expose domain entities as a REST API (https://api-platform.com/docs/).
+- Uses Symfony Fixtures to load sample domain entities (https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html).
+- Integrates with AR24 API using a custom API client. (https://developers.ar24.fr/doc/?php#introduction).
 
 ## Getting Started
 
