@@ -5,19 +5,31 @@ A simple mockup that demonstrates AR24 integration in a modern PHP/Symfony appli
 
 - Created using the Symfony Docker template (https://github.com/dunglas/symfony-docker). 
 - Added Symfony CLI in Dockerfile for local development convenience (https://symfony.com/download).
-- Started with Symfony 8.0 skeleton (https://symfony.com/doc/current/setup.html).
+- Started with Symfony 8.0 skeleton (https://symfony.com/doc/current/setup.html). 
+- Symfony Maker Bundle is included for code generation (https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html).
+- Uses Doctrine ORM for database interactions (https://www.doctrine-project.org/projects/orm.html). 
+- Uses API Platform to expose domain entities as a REST API (https://api-platform.com/docs/).
+- Uses Symfony Fixtures to load sample domain entities (https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html).
+- Integrates with AR24 API using a custom API client. (https://developers.ar24.fr/doc/?php#introduction).
 
 ## Getting Started
 
 1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+).
 2. Run `docker compose build --pull --no-cache` to build fresh images.
 3. Run `docker compose up --wait` to set up and start the application.
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+4. Run `docker compose exec php bash -c "php bin/console doctrine:fixtures:load"` to load domain entities fixtures.
+5. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
+6. Run `docker compose down --remove-orphans` to stop the Docker containers.
 
 ## Features
 
-Implementetd these API-calls and added the according Symfony commandds:
+- Added a simple domain "Test Case" that simulate a simple revaluation of the rent of a `Lease` contract, including the corresponding `Tenant`. AR24 integration is needed by the domain for the `RentRevaluationNotification` entity.
+
+
+- Domain entities are exposed as a REST API using API Platform (https://localhost/api).
+
+
+- Implemented these AR24 API-calls and added the according Symfony commands:
   * `ar24:attachment:list-by-registered-mail-id`  List all AR24 attachments for a mail
   * `ar24:attachment:list-by-user-id`             List all AR24 attachments for a user
   * `ar24:attachment:upload`                      Upload an AR24 attachment from a file
@@ -31,7 +43,7 @@ Implementetd these API-calls and added the according Symfony commandds:
 
 ## License
 
-AR24 Test Case is available under the GPL3 License.
+AR24 Test Case is available under the MIT license.
 
 ## Credits
 

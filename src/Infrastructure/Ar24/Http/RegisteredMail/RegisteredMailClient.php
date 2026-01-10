@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Ar24\Http\RegisteredMail;
 
+use App\Domain\Lre\Client\RegisteredMailClientInterface;
 use App\Infrastructure\Ar24\Http\Attachment\Exception\AttachmentException;
 use App\Infrastructure\Ar24\Http\Client\ApiClient;
 use App\Infrastructure\Ar24\Http\Client\Exception\ApiException;
@@ -15,7 +16,7 @@ use App\Infrastructure\Ar24\Http\User\Exception\UserException;
 /**
  * Client to interact with AR24 Registered Mail API.
  */
-final readonly class RegisteredMailClient
+final readonly class RegisteredMailClient implements RegisteredMailClientInterface
 {
     public function __construct(
         private ApiClient                     $client,
