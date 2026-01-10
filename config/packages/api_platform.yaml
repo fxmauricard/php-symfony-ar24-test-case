@@ -1,7 +1,10 @@
 api_platform:
-    title: Hello API Platform
+    title: AR 24 Test Case API
     version: 1.0.0
     defaults:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+    exception_to_status:
+        'App\Infrastructure\Ar24\Http\Client\Exception\ApiException': 500
+        'RuntimeException': 500

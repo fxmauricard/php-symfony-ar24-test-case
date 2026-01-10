@@ -3,6 +3,14 @@
 namespace App\Domain\Rental\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Domain\Rental\Input\RevaluateLeaseInput;
+use App\Domain\Rental\Processor\RevaluateLeaseProcessor;
 use App\Infrastructure\Rental\Persistence\LeaseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,7 +18,28 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LeaseRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Post(),
+        new Get(),
+        new Delete(),
+        new Patch(),
+        new Post(
+            uriTemplate: '/leases/{id}/revaluate',
+            uriVariables: [
+                'id' => new Link(fromClass: Lease::class, identifiers: ['id']),
+            ],
+            description: 'Revaluate a lease according to a new reference index.',
+            input: RevaluateLeaseInput::class,
+            output: self::class,
+            read: false,
+            deserialize: true,
+            name: 'revaluate',
+            processor: RevaluateLeaseProcessor::class,
+        ),
+    ]
+)]
 class Lease
 {
     #[ORM\Id]
@@ -43,7 +72,7 @@ class Lease
     /**
      * @var Collection<int, RentRevaluationNotification>
      */
-    #[ORM\OneToMany(targetEntity: RentRevaluationNotification::class, mappedBy: 'lease')]
+    #[ORM\OneToMany(targetEntity: RentRevaluationNotification::class, mappedBy: 'lease', cascade: ['persist'])]
     private Collection $rentRevaluationNotifications;
 
     public function __construct()

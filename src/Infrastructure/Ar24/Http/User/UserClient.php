@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Ar24\Http\User;
 
+use App\Domain\Lre\Client\UserClientInterface;
 use App\Infrastructure\Ar24\Http\Client\ApiClient;
 use App\Infrastructure\Ar24\Http\Client\Enum\Sort;
 use App\Infrastructure\Ar24\Http\Client\Exception\ApiException;
@@ -12,7 +13,7 @@ use App\Infrastructure\Ar24\Http\User\Model\User;
 /**
  * Client for interacting with AR24 User API.
  */
-final readonly class UserClient
+final readonly class UserClient implements UserClientInterface
 {
     /**
      * Constructor.
