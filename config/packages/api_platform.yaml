@@ -8,3 +8,8 @@ api_platform:
     exception_to_status:
         'App\Infrastructure\Ar24\Http\Client\Exception\ApiException': 500
         'RuntimeException': 500
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
