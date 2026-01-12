@@ -9,6 +9,9 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ApiPlatform\OpenApi\Model\Response;
 use App\Domain\Rental\Input\RevaluateLeaseInput;
 use App\Domain\Rental\Processor\RevaluateLeaseProcessor;
 use App\Infrastructure\Rental\Persistence\LeaseRepository;
@@ -30,7 +33,29 @@ use Doctrine\ORM\Mapping as ORM;
             uriVariables: [
                 'id' => new Link(fromClass: Lease::class, identifiers: ['id']),
             ],
-            description: 'Revaluate a lease according to a new reference index.',
+            openapi: new Operation(
+                responses: [
+                    '200' => new Response(description: 'The revaluation details.'),
+                ],
+                summary: 'Revaluate a Lease resource.',
+                description: 'Revaluate a Lease according to a new reference index.',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject(
+                        [
+                            'application/ld+json' => [
+                                'schema' => [
+                                    'properties' => [
+                                        'indice' => ['type' => 'integer', 'required' => true, 'description' => 'Revaluation indice.'],
+                                    ],
+                                ],
+                                'example' => [
+                                    'indice' => 0.03,
+                                ],
+                            ],
+                        ]
+                    )
+                )
+            ),
             input: RevaluateLeaseInput::class,
             output: self::class,
             read: false,
