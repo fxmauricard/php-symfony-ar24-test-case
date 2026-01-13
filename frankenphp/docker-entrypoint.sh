@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+# Fix Git ownership issue in CI environments
+if [ -d . git ]; then
+    git config --global --add safe.directory /app
+fi
+
 if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	# Install the project the first time PHP is started
 	# After the installation, the following block can be deleted
