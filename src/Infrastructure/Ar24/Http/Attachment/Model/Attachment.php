@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Ar24\Http\Attachment\Model;
 
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\Attribute\JsonField;
-use DateTimeImmutable;
 
 final class Attachment
 {
@@ -24,9 +23,10 @@ final class Attachment
         public ?int $userId = null,
 
         #[JsonField(name: 'upload_date')]
-        public ?DateTimeImmutable $uploadDate = null,
+        public ?\DateTimeImmutable $uploadDate = null,
 
         #[JsonField(name: 'api_id')]
         public ?string $apiId = null,
-    ) {}
+    ) {
+    }
 }

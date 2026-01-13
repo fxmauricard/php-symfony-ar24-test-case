@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Ar24\Http\RegisteredMail\Model;
 
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\Attribute\JsonField;
-use DateTimeImmutable;
 
 /**
  * Model representing an update to a recipient's information in a registered mail.
@@ -15,7 +14,7 @@ final class RecipientUpdate
         public ?int $id = null,
 
         #[JsonField]
-        public ?DateTimeImmutable $date = null,
+        public ?\DateTimeImmutable $date = null,
 
         #[JsonField]
         public ?string $lastname = null,
@@ -25,5 +24,6 @@ final class RecipientUpdate
 
         #[JsonField]
         public ?string $company = null,
-    ) {}
+    ) {
+    }
 }

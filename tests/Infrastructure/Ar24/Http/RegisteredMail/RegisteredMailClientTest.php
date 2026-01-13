@@ -4,10 +4,10 @@ namespace App\Tests\Infrastructure\Ar24\Http\RegisteredMail;
 
 use App\Infrastructure\Ar24\Http\Client\ApiClient;
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
-use App\Infrastructure\Ar24\Http\RegisteredMail\RegisteredMailClient;
 use App\Infrastructure\Ar24\Http\RegisteredMail\DataTransformer\RegisteredMailDataTransformer;
 use App\Infrastructure\Ar24\Http\RegisteredMail\Exception\AuthenticationException;
 use App\Infrastructure\Ar24\Http\RegisteredMail\Model\RegisteredMail;
+use App\Infrastructure\Ar24\Http\RegisteredMail\RegisteredMailClient;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +34,7 @@ final class RegisteredMailClientTest extends TestCase
 
         $this->api->expects($this->once())
             ->method('post')
-            ->with('/mail', $this->callback(fn($options) => isset($options['body']) && is_array($options['body'])))
+            ->with('/mail', $this->callback(fn ($options) => isset($options['body']) && is_array($options['body'])))
             ->willReturn($apiResult);
 
         $result = $this->client->send(123, $mail);

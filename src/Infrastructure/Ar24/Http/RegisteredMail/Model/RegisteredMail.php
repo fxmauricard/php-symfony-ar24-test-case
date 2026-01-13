@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Ar24\Http\RegisteredMail\Model;
 
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\Attribute\JsonField;
-use DateTimeImmutable;
 
 final class RegisteredMail
 {
@@ -21,7 +20,7 @@ final class RegisteredMail
         public ?string $customRef = null,
 
         #[JsonField]
-        public ?DateTimeImmutable $creation = null,
+        public ?\DateTimeImmutable $creation = null,
 
         #[JsonField]
         public ?array $recipients = null,
@@ -90,7 +89,7 @@ final class RegisteredMail
         public ?string $refFacturation = null,
 
         #[JsonField]
-        public ?DateTimeImmutable $date = null,
+        public ?\DateTimeImmutable $date = null,
 
         #[JsonField(name: 'full_hash_sha256')]
         public ?string $fullHashSha256 = null,
@@ -105,31 +104,31 @@ final class RegisteredMail
         public ?string $proofEvUrl = null,
 
         #[JsonField(name: 'ts_ev_date')]
-        public ?DateTimeImmutable $tsEvDate = null,
+        public ?\DateTimeImmutable $tsEvDate = null,
 
         #[JsonField(name: 'proof_ar_url')]
         public ?string $proofArUrl = null,
 
         #[JsonField(name: 'view_date')]
-        public ?DateTimeImmutable $viewDate = null,
+        public ?\DateTimeImmutable $viewDate = null,
 
         #[JsonField(name: 'proof_ng_url')]
         public ?string $proofNgUrl = null,
 
         #[JsonField(name: 'negligence_date')]
-        public ?DateTimeImmutable $negligenceDate = null,
+        public ?\DateTimeImmutable $negligenceDate = null,
 
         #[JsonField(name: 'proof_rf_url')]
         public ?string $proofRfUrl = null,
 
         #[JsonField(name: 'refused_date')]
-        public ?DateTimeImmutable $refusedDate = null,
+        public ?\DateTimeImmutable $refusedDate = null,
 
         #[JsonField(name: 'proof_bc_url')]
         public ?string $proofBcUrl = null,
 
         #[JsonField(name: 'bounced_date')]
-        public ?DateTimeImmutable $bouncedDate = null,
+        public ?\DateTimeImmutable $bouncedDate = null,
 
         #[JsonField(name: 'pdf_content')]
         public ?string $pdfContent = null,
@@ -156,5 +155,6 @@ final class RegisteredMail
         #[JsonField(name: 'update')]
         /** @var RecipientUpdate[]|null */
         public ?array $updates = null,
-    ) {}
+    ) {
+    }
 }

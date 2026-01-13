@@ -19,7 +19,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 #[CoversNothing]
 class ApiClientTest extends TestCase
 {
-    public function test_success_plain_json_and_masks_token_in_logs(): void
+    public function testSuccessPlainJsonAndMasksTokenInLogs(): void
     {
         $baseUrl = 'https://api.example.com';
         $token = 'secret-token';
@@ -43,7 +43,7 @@ class ApiClientTest extends TestCase
 
         $httpClient->expects($this->once())
             ->method('request')
-            ->with('GET', $baseUrl . '/foo', $this->callback(function ($options) use ($token) {
+            ->with('GET', $baseUrl.'/foo', $this->callback(function ($options) use ($token) {
                 return ($options['query']['token'] ?? null) === $token;
             }))
             ->willReturn($response);
@@ -56,7 +56,7 @@ class ApiClientTest extends TestCase
     }
 
     #[AllowMockObjectsWithoutExpectations]
-    public function test_decrypts_encrypted_payload(): void
+    public function testDecryptsEncryptedPayload(): void
     {
         $baseUrl = 'https://api.example.com';
         $token = 'tkn';
@@ -71,10 +71,11 @@ class ApiClientTest extends TestCase
         $httpClient->method('request')->willReturnCallback(function ($method, $url, $options) use (&$encryptedContent, $privateKey) {
             $date = $options['query']['date'];
             $payload = json_encode(['status' => 'SUCCESS', 'result' => ['a' => 1]]);
-            $key = hash('sha256', $date . $privateKey);
+            $key = hash('sha256', $date.$privateKey);
             $doubleHash = hash('sha256', hash('sha256', $privateKey));
             $iv = new UnicodeString($doubleHash)->slice(0, 16)->toString();
             $encryptedContent = openssl_encrypt($payload, 'aes-256-cbc', $key, 0, $iv);
+
             return new StubResponse(200, $encryptedContent);
         });
 
@@ -87,7 +88,7 @@ class ApiClientTest extends TestCase
     }
 
     #[AllowMockObjectsWithoutExpectations]
-    public function test_throws_on_non_200_status(): void
+    public function testThrowsOnNon200Status(): void
     {
         $baseUrl = 'https://api.example.com';
         $token = 'tkn';
@@ -106,21 +107,21 @@ class ApiClientTest extends TestCase
         $client->get('/foo');
     }
 
-    public function test_handle_error_token_missing_maps_to_token_exception(): void
+    public function testHandleErrorTokenMissingMapsToTokenException(): void
     {
         $client = $this->createClientWithErrorSlug('token_missing');
         $this->expectException(TokenException::class);
         $client->get('/foo');
     }
 
-    public function test_handle_error_unknown_code_maps_to_generic_exception(): void
+    public function testHandleErrorUnknownCodeMapsToGenericException(): void
     {
         $client = $this->createClientWithErrorSlug('some_unknown_code');
         $this->expectException(ApiException::class);
         $client->get('/foo');
     }
 
-    public function test_handle_error_invalid_date_maps_to_date_exception(): void
+    public function testHandleErrorInvalidDateMapsToDateException(): void
     {
         $client = $this->createClientWithErrorSlug('invalid_date');
         $this->expectException(DateException::class);
@@ -183,6 +184,7 @@ final class StubResponse implements ResponseInterface
         if (null === $type) {
             return [];
         }
+
         return null;
     }
 }

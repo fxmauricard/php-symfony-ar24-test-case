@@ -27,5 +27,6 @@ final class AttachmentDetail
 
         #[JsonField(name: 'download_url')]
         public ?string $downloadUrl = null,
-    ) {}
+    ) {
+    }
 }

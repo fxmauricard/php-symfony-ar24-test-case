@@ -4,7 +4,6 @@ namespace App\Infrastructure\Ar24\Http\User\Model;
 
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\Attribute\JsonField;
 use App\Infrastructure\Ar24\Http\User\Enum\UserStatut;
-use DateTimeImmutable;
 
 /**
  * Model representing a user for the AR24 API.
@@ -22,25 +21,25 @@ final class User
         public ?string $lastname = null,
 
         #[JsonField]
-        public ?string     $name = null,
+        public ?string $name = null,
 
         #[JsonField]
-        public ?string     $email = null,
+        public ?string $email = null,
 
         #[JsonField]
-        public ?string     $gender = null,
+        public ?string $gender = null,
 
         #[JsonField]
         public ?UserStatut $statut = null,
 
         #[JsonField]
-        public ?string     $company = null,
+        public ?string $company = null,
 
         #[JsonField(name: 'company_siret')]
-        public ?string     $companySiret = null,
+        public ?string $companySiret = null,
 
         #[JsonField(name: 'company_tva')]
-        public ?string     $companyTva = null,
+        public ?string $companyTva = null,
 
         #[JsonField]
         public ?string $country = null,
@@ -121,7 +120,7 @@ final class User
         public ?string $billingTva = null,
 
         #[JsonField]
-        public ?DateTimeImmutable $creation = null,
+        public ?\DateTimeImmutable $creation = null,
 
         #[JsonField(name: 'notif_cgu')]
         public ?bool $notifCgu = null,
@@ -131,5 +130,6 @@ final class User
 
         #[JsonField(name: 'is_payment_possible')]
         public ?bool $isPaymentPossible = null,
-    ) {}
+    ) {
+    }
 }

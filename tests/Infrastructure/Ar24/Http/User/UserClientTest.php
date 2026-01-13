@@ -5,9 +5,9 @@ namespace App\Tests\Infrastructure\Ar24\Http\User;
 use App\Infrastructure\Ar24\Http\Client\ApiClient;
 use App\Infrastructure\Ar24\Http\Client\Enum\Sort;
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
-use App\Infrastructure\Ar24\Http\User\UserClient;
 use App\Infrastructure\Ar24\Http\User\Enum\UserStatut;
 use App\Infrastructure\Ar24\Http\User\Model\User;
+use App\Infrastructure\Ar24\Http\User\UserClient;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

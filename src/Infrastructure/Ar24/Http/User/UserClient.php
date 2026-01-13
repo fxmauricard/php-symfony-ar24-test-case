@@ -19,10 +19,9 @@ final readonly class UserClient implements UserClientInterface
      * Constructor.
      */
     public function __construct(
-        private ApiClient            $client,
+        private ApiClient $client,
         private AutomaticTransformer $transformer,
-    )
-    {
+    ) {
     }
 
     /**
@@ -30,13 +29,11 @@ final readonly class UserClient implements UserClientInterface
      *
      * @param int $id User ID
      *
-     * @return User
-     *
      * @throws ApiException
      */
     public function getById(int $id): User
     {
-        $data = $this->client->get( '/user', [
+        $data = $this->client->get('/user', [
             'query' => [
                 'id_user' => $id,
             ],
@@ -53,13 +50,11 @@ final readonly class UserClient implements UserClientInterface
      *
      * @param string $email User's email
      *
-     * @return User
-     *
      * @throws ApiException
      */
     public function getByEmail(string $email): User
     {
-        $data = $this->client->get( '/user', [
+        $data = $this->client->get('/user', [
             'query' => [
                 'email' => $email,
             ],
@@ -74,9 +69,9 @@ final readonly class UserClient implements UserClientInterface
     /**
      * List all users.
      *
-     * @param int $max Number of results returned
-     * @param int $start Return result from the defined start index
-     * @param Sort $sort Sort by ID
+     * @param int  $max   Number of results returned
+     * @param int  $start Return result from the defined start index
+     * @param Sort $sort  Sort by ID
      *
      * @return User[]
      *
@@ -84,7 +79,7 @@ final readonly class UserClient implements UserClientInterface
      */
     public function list(int $max = 10, int $start = 0, Sort $sort = Sort::ASC): array
     {
-        $data = $this->client->get( '/user/list', [
+        $data = $this->client->get('/user/list', [
             'query' => [
                 'max' => $max,
                 'start' => $start,
@@ -94,7 +89,7 @@ final readonly class UserClient implements UserClientInterface
         $usersData = $data['result']['users'] ?? [];
 
         return array_map(
-            fn(array $userData) => $this->transformer->reverseTransform($userData, User::class),
+            fn (array $userData) => $this->transformer->reverseTransform($userData, User::class),
             $usersData
         );
     }
@@ -102,16 +97,12 @@ final readonly class UserClient implements UserClientInterface
     /**
      * Create user.
      *
-     * @param User $user
-     *
-     * @return User
-     *
      * @throws ApiException
      */
     public function create(User $user): User
     {
         $data = $this->client->post('/user', [
-            'body' => $this->transformer->transform($user)
+            'body' => $this->transformer->transform($user),
         ], [
             'missing_firstname' => [UserException::class, 'Please specify a firstname'],
             'missing_lastname' => [UserException::class, 'Please specify a lastname'],

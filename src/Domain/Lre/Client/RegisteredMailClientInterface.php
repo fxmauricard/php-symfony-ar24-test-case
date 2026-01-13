@@ -19,6 +19,7 @@ interface RegisteredMailClientInterface
 
     /**
      * @return RegisteredMail[]
+     *
      * @throws ApiException
      */
     public function list(int $userId): array;

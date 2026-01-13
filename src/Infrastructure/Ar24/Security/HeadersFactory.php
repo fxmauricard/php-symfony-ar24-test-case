@@ -4,20 +4,20 @@ namespace App\Infrastructure\Ar24\Security;
 
 use Symfony\Component\String\UnicodeString;
 
-
 /**
  * Factory for generating AR24 API request headers.
  */
 final readonly class HeadersFactory
 {
-   /**
+    /**
      * Constructor.
      *
-     * @param string $privateKey The private key used for signature generation.
+     * @param string $privateKey the private key used for signature generation
      */
     public function __construct(
         private string $privateKey,
-    ) {}
+    ) {
+    }
 
     /**
      * Generates the necessary headers for each AR24 API request.
@@ -29,8 +29,8 @@ final readonly class HeadersFactory
         $signature = $this->generateSignature($date);
 
         return [
-            'Accept-Language'   => 'en',
-            'signature'         => $signature,
+            'Accept-Language' => 'en',
+            'signature' => $signature,
         ];
     }
 
@@ -41,9 +41,9 @@ final readonly class HeadersFactory
      * from the first 16 characters of the resulting hash, and encrypts the given date with
      * the hashed key and IV.
      *
-     * @param string $date The date to be encrypted and signed.
+     * @param string $date the date to be encrypted and signed
      *
-     * @return string The encrypted signature for the provided date.
+     * @return string the encrypted signature for the provided date
      */
     private function generateSignature(string $date): string
     {
@@ -55,6 +55,6 @@ final readonly class HeadersFactory
         $iv = new UnicodeString($doubleHash)->slice(0, 16)->toString();
 
         // AES-256-CBC encryption.
-        return openssl_encrypt($date,'aes-256-cbc', $hashedPrivateKey, false, $iv);
+        return openssl_encrypt($date, 'aes-256-cbc', $hashedPrivateKey, false, $iv);
     }
 }

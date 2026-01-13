@@ -16,7 +16,7 @@ use App\Infrastructure\Ar24\Http\User\Exception\UserException;
 final readonly class AttachmentClient
 {
     public function __construct(
-        private ApiClient            $client,
+        private ApiClient $client,
         private AutomaticTransformer $transformer,
     ) {
     }
@@ -24,11 +24,11 @@ final readonly class AttachmentClient
     /**
      * Upload an attachment.
      *
-     * @param int $userId User ID
-     * @param string $filePath Path to the file to upload
+     * @param int         $userId   User ID
+     * @param string      $filePath Path to the file to upload
      * @param string|null $fileName Optional file name to use for the uploaded file
      *
-     * @return int|null  The ID of the uploaded attachment
+     * @return int|null The ID of the uploaded attachment
      *
      * @throws ApiException
      */
@@ -56,10 +56,10 @@ final readonly class AttachmentClient
     /**
      * List attachments for a user.
      *
-     * @param int $userId User ID
-     * @param int $max Number of results returned
-     * @param int $start Return result from the defined start index
-     * @param Sort $sort Sort by ID
+     * @param int  $userId User ID
+     * @param int  $max    Number of results returned
+     * @param int  $start  Return result from the defined start index
+     * @param Sort $sort   Sort by ID
      *
      * @return Attachment[]
      *
@@ -67,7 +67,7 @@ final readonly class AttachmentClient
      */
     public function listByUserId(int $userId, int $max = 10, int $start = 0, Sort $sort = Sort::ASC): array
     {
-        $data = $this->client->get( '/user/attachment', [
+        $data = $this->client->get('/user/attachment', [
             'query' => [
                 'id_user' => $userId,
                 'max' => $max,
@@ -80,7 +80,7 @@ final readonly class AttachmentClient
         $attachmentsData = $data['result']['attachments'] ?? [];
 
         return array_map(
-            fn(array $attachmentData) => $this->transformer->reverseTransform($attachmentData, Attachment::class),
+            fn (array $attachmentData) => $this->transformer->reverseTransform($attachmentData, Attachment::class),
             $attachmentsData
         );
     }
@@ -96,7 +96,7 @@ final readonly class AttachmentClient
      */
     public function listByRegisteredMailId(int $registeredMailId): array
     {
-        $data = $this->client->get( '/attachment', [
+        $data = $this->client->get('/attachment', [
             'query' => [
                 'id' => $registeredMailId,
             ],
@@ -106,7 +106,7 @@ final readonly class AttachmentClient
         $attachmentsData = $data['result']['attachments'] ?? [];
 
         return array_map(
-            fn(array $attachmentData) => $this->transformer->reverseTransform($attachmentData, Attachment::class),
+            fn (array $attachmentData) => $this->transformer->reverseTransform($attachmentData, Attachment::class),
             $attachmentsData
         );
     }

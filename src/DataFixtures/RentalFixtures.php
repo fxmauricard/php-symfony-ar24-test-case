@@ -7,7 +7,6 @@ use App\Domain\Rental\Entity\RentRevaluationNotification;
 use App\Domain\Rental\Entity\Tenant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use DateTime;
 
 class RentalFixtures extends Fixture
 {
@@ -62,11 +61,11 @@ class RentalFixtures extends Fixture
     {
         $lease = new Lease()
             ->setTenant($tenant)
-            ->setStartDate(new DateTime($start))
+            ->setStartDate(new \DateTime($start))
             ->setInitialRent(number_format($initial, 2, '.', ''))
             ->setCurrentRent(number_format($current, 2, '.', ''))
             ->setReferenceIndex(number_format($index, 2, '.', ''))
-            ->setLastRevaluationDate(new DateTime($lastRevaluation));
+            ->setLastRevaluationDate(new \DateTime($lastRevaluation));
 
         foreach ($notifications as $data) {
             $notification = new RentRevaluationNotification()

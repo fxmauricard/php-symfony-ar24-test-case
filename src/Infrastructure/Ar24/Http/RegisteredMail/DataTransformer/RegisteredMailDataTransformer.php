@@ -14,7 +14,8 @@ final readonly class RegisteredMailDataTransformer
 {
     public function __construct(
         private AutomaticTransformer $automaticTransformer,
-    ) {}
+    ) {
+    }
 
     /**
      * Transforms an Ar24RegisteredMail object into an array (for API request).
@@ -29,6 +30,7 @@ final readonly class RegisteredMailDataTransformer
                 if (!$attachmentDetail instanceof AttachmentDetail) {
                     return $attachmentDetail;
                 }
+
                 return $this->automaticTransformer->transform($attachmentDetail);
             }, $data['attachments_details']);
         }
@@ -44,6 +46,7 @@ final readonly class RegisteredMailDataTransformer
                     $transformed['id_recipient_update'] = $transformed['id'];
                     unset($transformed['id']);
                 }
+
                 return $transformed;
             }, $data['update']);
         }
@@ -51,7 +54,7 @@ final readonly class RegisteredMailDataTransformer
         // Remove null values
         if (!$includeNullValues) {
             foreach ($data as $key => $value) {
-                if ($value === null) {
+                if (null === $value) {
                     unset($data[$key]);
                 }
             }

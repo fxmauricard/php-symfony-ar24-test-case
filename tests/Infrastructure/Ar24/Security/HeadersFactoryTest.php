@@ -25,10 +25,10 @@ final class HeadersFactoryTest extends TestCase
     public function testSignatureGenerationMatchesDocumentationExample(): void
     {
         $factory = new HeadersFactory(self::PRIVATE_KEY);
-        
+
         // Since generateSignature is private, we test it through buildHeaders
         $headers = $factory->buildHeaders(self::DATE);
-        
+
         $this->assertSame(self::EXPECTED_SIGNATURE, $headers['signature']);
     }
 }

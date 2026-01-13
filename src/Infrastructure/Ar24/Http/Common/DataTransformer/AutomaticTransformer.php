@@ -3,12 +3,7 @@
 namespace App\Infrastructure\Ar24\Http\Common\DataTransformer;
 
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\Attribute\JsonField;
-use BackedEnum;
 use DateTimeImmutable;
-use ReflectionClass;
-use ReflectionNamedType;
-use ReflectionProperty;
-use ReflectionUnionType;
 
 /**
  * Automatic transformer for converting between objects and arrays using PHP 8.4 attributes.
@@ -46,7 +41,7 @@ final class AutomaticTransformer
     public function transform(object $object): array
     {
         // Create a reflection object to inspect the target object's structure
-        $reflection = new ReflectionClass($object);
+        $reflection = new \ReflectionClass($object);
         $result = [];
 
         // Iterate through all properties (public, protected, and private) defined on the object
@@ -93,7 +88,7 @@ final class AutomaticTransformer
      *
      * Properties are set directly via reflection, no setters required.
      *
-     * @param array $data Input array with JSON field names as keys
+     * @param array  $data      Input array with JSON field names as keys
      * @param string $className Fully qualified class name to instantiate
      *
      * @return object Typed instance of the requested class
@@ -104,7 +99,7 @@ final class AutomaticTransformer
         $object = new $className();
 
         // Create a reflection object to inspect the target class structure
-        $reflection = new ReflectionClass($object);
+        $reflection = new \ReflectionClass($object);
 
         // Iterate through all properties (public, protected, and private) defined on the class
         foreach ($reflection->getProperties() as $property) {
@@ -154,16 +149,16 @@ final class AutomaticTransformer
      * - backed enum: converted to its underlying value (string or int)
      * - other types: returned as-is
      *
-     * @param mixed $value The value to convert
-     * @param JsonField $attribute The attribute configuration
-     * @param ReflectionProperty $property The property reflection for type information
+     * @param mixed               $value     The value to convert
+     * @param JsonField           $attribute The attribute configuration
+     * @param \ReflectionProperty $property  The property reflection for type information
      *
      * @return mixed JSON-compatible value
      */
     private function convertValueForJson(
         mixed $value,
         JsonField $attribute,
-        ReflectionProperty $property
+        \ReflectionProperty $property,
     ): mixed {
         // Return null values as-is without conversion
         if (null === $value) {
@@ -172,7 +167,7 @@ final class AutomaticTransformer
 
         // Handle backed enums by extracting their underlying value
         // This must be checked before type matching since enums have specific class names
-        if ($value instanceof BackedEnum) {
+        if ($value instanceof \BackedEnum) {
             return $value->value;
         }
 
@@ -207,16 +202,16 @@ final class AutomaticTransformer
      * - backed enum: creates enum instance using tryFrom() method
      * - other types: returned as-is
      *
-     * @param mixed $value The value from JSON data
-     * @param ReflectionProperty $property The property reflection for type information
-     * @param JsonField $attribute The attribute configuration
+     * @param mixed               $value     The value from JSON data
+     * @param \ReflectionProperty $property  The property reflection for type information
+     * @param JsonField           $attribute The attribute configuration
      *
      * @return mixed Typed value ready for the object property
      */
     private function convertValueFromJson(
         mixed $value,
-        ReflectionProperty $property,
-        JsonField $attribute
+        \ReflectionProperty $property,
+        JsonField $attribute,
     ): mixed {
         // Return null values as-is without conversion
         // This preserves null values for optional/nullable properties
@@ -228,7 +223,7 @@ final class AutomaticTransformer
         $type = $this->getPropertyType($property);
 
         // Check if the type is a backed enum and handle conversion
-        if ($type !== null && enum_exists($type)) {
+        if (null !== $type && enum_exists($type)) {
             // Use tryFrom() to safely convert the value to an enum instance
             // Returns null if the value doesn't match any enum case
             // @phpstan-ignore-next-line - $type is a valid enum class name string
@@ -271,11 +266,11 @@ final class AutomaticTransformer
      * - Union types: int|float, string|null, etc. (returns the first non-null type, prioritizing non-builtin types)
      * - Nullable types: ?int is equivalent to int|null
      *
-     * @param ReflectionProperty $property The property to analyze
+     * @param \ReflectionProperty $property The property to analyze
      *
      * @return ?string The type name or null if no type hint is defined
      */
-    private function getPropertyType(ReflectionProperty $property): ?string
+    private function getPropertyType(\ReflectionProperty $property): ?string
     {
         // Check if the property has a type hint defined
         // If no type hint exists, we can't perform type conversion
@@ -288,17 +283,17 @@ final class AutomaticTransformer
 
         // Handle simple named types (e.g., int, string, DateTimeImmutable, MyClass)
         // These are straightforward: the property has exactly one type
-        if ($type instanceof ReflectionNamedType) {
+        if ($type instanceof \ReflectionNamedType) {
             return $type->getName();
         }
 
         // Handle union types (e.g., int|float, string|null, ?int which is int|null)
         // Union types can have multiple possible types separated by |
-        if ($type instanceof ReflectionUnionType) {
+        if ($type instanceof \ReflectionUnionType) {
             // First pass: prioritize non-builtin types (custom classes like DateTimeImmutable)
             // This ensures DateTime properties are recognized correctly before fallback to builtin types
             foreach ($type->getTypes() as $t) {
-                if ($t instanceof ReflectionNamedType && !$t->isBuiltin() && $t->getName() !== 'null') {
+                if ($t instanceof \ReflectionNamedType && !$t->isBuiltin() && 'null' !== $t->getName()) {
                     return $t->getName();
                 }
             }
@@ -306,7 +301,7 @@ final class AutomaticTransformer
             // Second pass: return the first non-null builtin type (int, string, bool, float, etc.)
             // This handles nullable types like ?int (which is int|null), preferring int over null
             foreach ($type->getTypes() as $t) {
-                if ($t instanceof ReflectionNamedType && $t->getName() !== 'null') {
+                if ($t instanceof \ReflectionNamedType && 'null' !== $t->getName()) {
                     return $t->getName();
                 }
             }
@@ -322,12 +317,12 @@ final class AutomaticTransformer
      * Uses DateTimeImmutable::createFromFormat() to parse the date string.
      * Returns null if the value is empty, not a string, or parsing fails.
      *
-     * @param mixed $value The value to parse (typically a string from JSON)
+     * @param mixed  $value  The value to parse (typically a string from JSON)
      * @param string $format The date format (e.g., 'Y-m-d H:i:s')
      *
-     * @return ?DateTimeImmutable The parsed DateTimeImmutable or null if parsing fails
+     * @return ?\DateTimeImmutable The parsed DateTimeImmutable or null if parsing fails
      */
-    private static function parseDate(mixed $value, string $format): ?DateTimeImmutable
+    private static function parseDate(mixed $value, string $format): ?\DateTimeImmutable
     {
         // Validate that we have a non-empty string to parse
         // Return null for empty strings, non-strings, or null values
@@ -337,7 +332,7 @@ final class AutomaticTransformer
 
         // Attempt to parse the date string using the specified format
         // DateTimeImmutable::createFromFormat() returns false if parsing fails
-        $parsed = DateTimeImmutable::createFromFormat($format, $value);
+        $parsed = \DateTimeImmutable::createFromFormat($format, $value);
 
         // Return the parsed DateTimeImmutable, or null if parsing failed
         // This prevents returning false (which would be unexpected type)

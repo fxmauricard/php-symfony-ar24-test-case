@@ -4,7 +4,6 @@ namespace App\Command\Ar24\Attachment;
 
 use App\Infrastructure\Ar24\Http\Attachment\AttachmentClient;
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
-use Exception;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,17 +21,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 readonly class ListByRegisteredMailIdCommand
 {
     public function __construct(
-        private AttachmentClient     $client,
+        private AttachmentClient $client,
         private AutomaticTransformer $transformer,
     ) {
     }
 
     public function __invoke(
-        InputInterface                                                                                          $input,
-        OutputInterface                                                                                         $output,
+        InputInterface $input,
+        OutputInterface $output,
         #[Argument(description: 'The ID of the registered mail for which we want to retrieve attachments')] int $registeredMailId,
-    ): int
-    {
+    ): int {
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Listing AR24 attachments for a registered mail');
@@ -42,21 +40,23 @@ readonly class ListByRegisteredMailIdCommand
 
             if (empty($attachments)) {
                 $io->warning('No attachments found.');
+
                 return Command::SUCCESS;
             }
 
             $io->success(sprintf('Found %d attachment(s).', count($attachments)));
 
-            $attachmentsData = array_map(fn($attachment) => $this->transformer->transform($attachment), $attachments);
+            $attachmentsData = array_map(fn ($attachment) => $this->transformer->transform($attachment), $attachments);
 
             $headers = array_keys($attachmentsData[0]);
-            $rows = array_map(function($attachment) {
-                return array_map(fn($v) => is_array($v) ? json_encode($v) : $v, array_values($attachment));
+            $rows = array_map(function ($attachment) {
+                return array_map(fn ($v) => is_array($v) ? json_encode($v) : $v, array_values($attachment));
             }, $attachmentsData);
 
             $io->table($headers, $rows);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $io->error(sprintf('An error occurred: %s', $e->getMessage()));
+
             return Command::FAILURE;
         }
 

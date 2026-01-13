@@ -20,6 +20,7 @@ interface UserClientInterface
 
     /**
      * @return User[]
+     *
      * @throws ApiException
      */
     public function list(int $max = 10, int $start = 0, Sort $sort = Sort::ASC): array;

@@ -3,7 +3,6 @@
 namespace App\Tests\Infrastructure\Ar24\Security;
 
 use App\Infrastructure\Ar24\Security\ResponseDecrypter;
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 final class ResponseDecrypterTest extends TestCase
@@ -25,7 +24,7 @@ final class ResponseDecrypterTest extends TestCase
     {
         $decrypter = new ResponseDecrypter('wrong-key');
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unable to decrypt AR24 response.');
 
         $decrypter->decryptResponse(self::ENCRYPTED_RESPONSE, self::DATE);

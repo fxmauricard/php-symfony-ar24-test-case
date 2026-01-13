@@ -7,14 +7,14 @@ use Exception;
 /**
  * Base exception for AR24 API errors.
  */
-class ApiException extends Exception
+class ApiException extends \Exception
 {
     /**
      * Constructor.
      */
     public function __construct(
         private readonly string $name,
-        string $message
+        string $message,
     ) {
         parent::__construct($message);
     }

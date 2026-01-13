@@ -5,7 +5,6 @@ namespace App\Tests\Infrastructure\Ar24\Http\Common\DataTransformer;
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
 use App\Infrastructure\Ar24\Http\User\Enum\UserStatut;
 use App\Infrastructure\Ar24\Http\User\Model\User;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +21,7 @@ final class AutomaticTransformerAr24UserTest extends TestCase
 
     public function testTransformWithAllProperties(): void
     {
-        $creation = new DateTimeImmutable('2019-01-09 10:48:49');
+        $creation = new \DateTimeImmutable('2019-01-09 10:48:49');
         $user = new User(
             id: 50956,
             firstname: 'Hugo',
@@ -193,7 +192,7 @@ final class AutomaticTransformerAr24UserTest extends TestCase
         $this->assertTrue($user->notifyDp);
         $this->assertFalse($user->paymentActive);
         $this->assertSame('20', $user->billingTva);
-        $this->assertInstanceOf(DateTimeImmutable::class, $user->creation);
+        $this->assertInstanceOf(\DateTimeImmutable::class, $user->creation);
         $this->assertSame('2019-01-09 10:48:49', $user->creation?->format('Y-m-d H:i:s'));
         $this->assertFalse($user->notifCgu);
         $this->assertFalse($user->notifProfilUncomplete);

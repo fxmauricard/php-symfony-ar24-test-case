@@ -7,4 +7,3 @@ enum UserStatut: string
     case INDIVIDUAL = 'particulier';
     case BUSINESS = 'professionnel';
 }
-

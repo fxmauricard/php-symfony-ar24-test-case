@@ -8,8 +8,6 @@ use App\Infrastructure\Ar24\Http\Client\Exception\DateException;
 use App\Infrastructure\Ar24\Http\Client\Exception\TokenException;
 use App\Infrastructure\Ar24\Security\HeadersFactory;
 use App\Infrastructure\Ar24\Security\ResponseDecrypter;
-use DateTimeImmutable;
-use DateTimeZone;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -35,31 +33,31 @@ class ApiClient
     ];
 
     /**
-     * @var string Base URL for the AR24 API.
+     * @var string base URL for the AR24 API
      */
     private string $baseUrl;
     /**
-     * @var string AR24 API token.
+     * @var string AR24 API token
      */
     private string $token;
 
     /**
      * Constructor for the Ar24ApiClient.
      *
-     * @param HttpClientInterface $client The HTTP client to use for requests.
-     * @param HeadersFactory $headersFactory Factory for creating AR24-specific headers.
-     * @param ResponseDecrypter $responseDecrypter Service for decrypting AR24 API responses.
-     * @param LoggerInterface $logger Logger for logging requests and responses.
-     * @param string $baseUrl The base URL for the AR24 API.
-     * @param string $token The AR24 API token.
+     * @param HttpClientInterface $client            the HTTP client to use for requests
+     * @param HeadersFactory      $headersFactory    factory for creating AR24-specific headers
+     * @param ResponseDecrypter   $responseDecrypter service for decrypting AR24 API responses
+     * @param LoggerInterface     $logger            logger for logging requests and responses
+     * @param string              $baseUrl           the base URL for the AR24 API
+     * @param string              $token             the AR24 API token
      */
     public function __construct(
         private readonly HttpClientInterface $client,
-        private readonly HeadersFactory      $headersFactory,
-        private readonly ResponseDecrypter   $responseDecrypter,
-        private readonly LoggerInterface     $logger,
-        string                               $baseUrl,
-        string                               $token
+        private readonly HeadersFactory $headersFactory,
+        private readonly ResponseDecrypter $responseDecrypter,
+        private readonly LoggerInterface $logger,
+        string $baseUrl,
+        string $token,
     ) {
         $this->baseUrl = rtrim($baseUrl, '/');
         $this->token = $token;
@@ -69,19 +67,19 @@ class ApiClient
      * Sends an HTTP request to the AR24 API with the specified method, URL, and options.
      * Handles encryption, decryption, logging, and error handling for requests and responses.
      *
-     * @param string $method The HTTP method to use for the request (e.g., 'GET', 'POST').
-     * @param string $endpoint The endpoint path for the API request.
-     * @param array $options Optional parameters to customize the request, including headers, query, and timeout settings.
-     * @param array $errorMap A map of error codes to [ExceptionClass, Message].
+     * @param string $method   The HTTP method to use for the request (e.g., 'GET', 'POST').
+     * @param string $endpoint the endpoint path for the API request
+     * @param array  $options  optional parameters to customize the request, including headers, query, and timeout settings
+     * @param array  $errorMap a map of error codes to [ExceptionClass, Message]
      *
      * @return array The decoded response content from the API. If the response is encrypted, it will be decrypted before returning.
      *
-     * @throws ClientException If the HTTP status code is not 200.
-     * @throws ApiException If the API returns an error status.
+     * @throws ClientException if the HTTP status code is not 200
+     * @throws ApiException    if the API returns an error status
      */
     private function request(string $method, string $endpoint, array $options = [], array $errorMap = []): array
     {
-        $date = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'))->format('Y-m-d H:i:s');
+        $date = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'))->format('Y-m-d H:i:s');
         $authentication = [
             'token' => $this->token, // AR24 API token.
             'date' => $date, // Date needed for decrypting API response.
@@ -96,7 +94,7 @@ class ApiClient
         ];
 
         // Add authentication parameters to query or body based on the HTTP method.
-        $key = strtoupper($method) === 'GET' ? 'query' : 'body';
+        $key = 'GET' === strtoupper($method) ? 'query' : 'body';
         $requestOptions[$key] = array_merge($authentication, $options[$key] ?? []);
 
         // Log and send the request.
@@ -108,10 +106,10 @@ class ApiClient
         }
         $this->logger->info('AR24 API Request', [
             'method' => $method,
-            'url' => $this->baseUrl . $endpoint,
+            'url' => $this->baseUrl.$endpoint,
             'options' => $loggedOptions,
         ]);
-        $response = $this->client->request($method, $this->baseUrl . $endpoint, $requestOptions);
+        $response = $this->client->request($method, $this->baseUrl.$endpoint, $requestOptions);
 
         // Log the response content.
         $statusCode = $response->getStatusCode();
@@ -169,7 +167,7 @@ class ApiClient
             // Wrap non-200 responses into a domain exception containing status and body for easier handling.
             $message = sprintf('Unexpected HTTP status: %d. Body: %s', $statusCode, $rawContent);
             $this->logger->error($message);
-            throw new ApiException('http_' . $statusCode, $message);
+            throw new ApiException('http_'.$statusCode, $message);
         }
     }
 
@@ -177,8 +175,8 @@ class ApiClient
      * Handles API errors by throwing specific exceptions based on the error code.
      * Allows for a custom error map to be used for call-specific handling.
      *
-     * @param array $content The decoded API response content.
-     * @param array $errorMap A map of error codes to [ExceptionClass, Message].
+     * @param array $content  the decoded API response content
+     * @param array $errorMap a map of error codes to [ExceptionClass, Message]
      *
      * @throws ApiException
      */
@@ -198,11 +196,11 @@ class ApiClient
     /**
      * Sends a GET request to the specified URL with the provided options.
      *
-     * @param string $endpoint The endpoint path to send the GET request to.
-     * @param array $options An array of options to customize the request.
-     * @param array $errorMap A map of error codes to [ExceptionClass, Message].
+     * @param string $endpoint the endpoint path to send the GET request to
+     * @param array  $options  an array of options to customize the request
+     * @param array  $errorMap a map of error codes to [ExceptionClass, Message]
      *
-     * @return array The response from the request.
+     * @return array the response from the request
      *
      * @throws ApiException
      */
@@ -214,11 +212,11 @@ class ApiClient
     /**
      * Sends a POST request to the specified URL with the given options.
      *
-     * @param string $endpoint The endpoint path to send the POST request to.
-     * @param array $options Optional parameters to customize the request.
-     * @param array $errorMap A map of error codes to [ExceptionClass, Message].
+     * @param string $endpoint the endpoint path to send the POST request to
+     * @param array  $options  optional parameters to customize the request
+     * @param array  $errorMap a map of error codes to [ExceptionClass, Message]
      *
-     * @return array The response resulting from the POST request.
+     * @return array the response resulting from the POST request
      *
      * @throws ApiException
      */

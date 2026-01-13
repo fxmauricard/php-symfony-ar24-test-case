@@ -4,7 +4,6 @@ namespace App\Tests\Infrastructure\Ar24\Http\Common\DataTransformer;
 
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\Attribute\JsonField;
 use App\Infrastructure\Ar24\Http\Common\DataTransformer\AutomaticTransformer;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 // Test enums for testing enum support
@@ -50,9 +49,20 @@ final class AutomaticTransformerTest extends TestCase
                 $this->active = true;
             }
 
-            public function getId(): ?int { return $this->id; }
-            public function getName(): ?string { return $this->name; }
-            public function isActive(): ?bool { return $this->active; }
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
+
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
+
+            public function isActive(): ?bool
+            {
+                return $this->active;
+            }
         };
 
         $result = $this->transformer->transform($user);
@@ -66,14 +76,17 @@ final class AutomaticTransformerTest extends TestCase
     {
         $model = new class {
             #[JsonField]
-            private ?DateTimeImmutable $createdAt = null;
+            private ?\DateTimeImmutable $createdAt = null;
 
             public function __construct()
             {
-                $this->createdAt = new DateTimeImmutable('2024-01-15 10:30:45');
+                $this->createdAt = new \DateTimeImmutable('2024-01-15 10:30:45');
             }
 
-            public function getCreatedAt(): ?DateTimeImmutable { return $this->createdAt; }
+            public function getCreatedAt(): ?\DateTimeImmutable
+            {
+                return $this->createdAt;
+            }
         };
 
         $result = $this->transformer->transform($model);
@@ -92,7 +105,10 @@ final class AutomaticTransformerTest extends TestCase
                 $this->email = 'john@example.com';
             }
 
-            public function getEmail(): ?string { return $this->email; }
+            public function getEmail(): ?string
+            {
+                return $this->email;
+            }
         };
 
         $result = $this->transformer->transform($user);
@@ -116,8 +132,15 @@ final class AutomaticTransformerTest extends TestCase
                 $this->email = null;
             }
 
-            public function getName(): ?string { return $this->name; }
-            public function getEmail(): ?string { return $this->email; }
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
+
+            public function getEmail(): ?string
+            {
+                return $this->email;
+            }
         };
 
         $result = $this->transformer->transform($user);
@@ -138,12 +161,41 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField]
             private ?bool $active = null;
 
-            public function setId(?int $id): self { $this->id = $id; return $this; }
-            public function getId(): ?int { return $this->id; }
-            public function setName(?string $name): self { $this->name = $name; return $this; }
-            public function getName(): ?string { return $this->name; }
-            public function setActive(?bool $active): self { $this->active = $active; return $this; }
-            public function isActive(): ?bool { return $this->active; }
+            public function setId(?int $id): self
+            {
+                $this->id = $id;
+
+                return $this;
+            }
+
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
+
+            public function setName(?string $name): self
+            {
+                $this->name = $name;
+
+                return $this;
+            }
+
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
+
+            public function setActive(?bool $active): self
+            {
+                $this->active = $active;
+
+                return $this;
+            }
+
+            public function isActive(): ?bool
+            {
+                return $this->active;
+            }
         };
 
         $data = [
@@ -163,10 +215,19 @@ final class AutomaticTransformerTest extends TestCase
     {
         $className = new class {
             #[JsonField]
-            private ?DateTimeImmutable $createdAt = null;
+            private ?\DateTimeImmutable $createdAt = null;
 
-            public function setCreatedAt(?DateTimeImmutable $createdAt): self { $this->createdAt = $createdAt; return $this; }
-            public function getCreatedAt(): ?DateTimeImmutable { return $this->createdAt; }
+            public function setCreatedAt(?\DateTimeImmutable $createdAt): self
+            {
+                $this->createdAt = $createdAt;
+
+                return $this;
+            }
+
+            public function getCreatedAt(): ?\DateTimeImmutable
+            {
+                return $this->createdAt;
+            }
         };
 
         $data = [
@@ -175,7 +236,7 @@ final class AutomaticTransformerTest extends TestCase
 
         $object = $this->transformer->reverseTransform($data, $className::class);
 
-        $this->assertInstanceOf(DateTimeImmutable::class, $object->getCreatedAt());
+        $this->assertInstanceOf(\DateTimeImmutable::class, $object->getCreatedAt());
         $this->assertSame('2024-06-20 14:15:30', $object->getCreatedAt()->format('Y-m-d H:i:s'));
     }
 
@@ -183,10 +244,19 @@ final class AutomaticTransformerTest extends TestCase
     {
         $className = new class {
             #[JsonField(dateFormat: 'Y-m-d')]
-            private ?DateTimeImmutable $date = null;
+            private ?\DateTimeImmutable $date = null;
 
-            public function setDate(?DateTimeImmutable $date): self { $this->date = $date; return $this; }
-            public function getDate(): ?DateTimeImmutable { return $this->date; }
+            public function setDate(?\DateTimeImmutable $date): self
+            {
+                $this->date = $date;
+
+                return $this;
+            }
+
+            public function getDate(): ?\DateTimeImmutable
+            {
+                return $this->date;
+            }
         };
 
         $data = [
@@ -211,16 +281,55 @@ final class AutomaticTransformerTest extends TestCase
             private ?bool $active = null;
 
             #[JsonField]
-            private ?DateTimeImmutable $createdAt = null;
+            private ?\DateTimeImmutable $createdAt = null;
 
-            public function setId(?int $id): self { $this->id = $id; return $this; }
-            public function getId(): ?int { return $this->id; }
-            public function setName(?string $name): self { $this->name = $name; return $this; }
-            public function getName(): ?string { return $this->name; }
-            public function setActive(?bool $active): self { $this->active = $active; return $this; }
-            public function isActive(): ?bool { return $this->active; }
-            public function setCreatedAt(?DateTimeImmutable $createdAt): self { $this->createdAt = $createdAt; return $this; }
-            public function getCreatedAt(): ?DateTimeImmutable { return $this->createdAt; }
+            public function setId(?int $id): self
+            {
+                $this->id = $id;
+
+                return $this;
+            }
+
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
+
+            public function setName(?string $name): self
+            {
+                $this->name = $name;
+
+                return $this;
+            }
+
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
+
+            public function setActive(?bool $active): self
+            {
+                $this->active = $active;
+
+                return $this;
+            }
+
+            public function isActive(): ?bool
+            {
+                return $this->active;
+            }
+
+            public function setCreatedAt(?\DateTimeImmutable $createdAt): self
+            {
+                $this->createdAt = $createdAt;
+
+                return $this;
+            }
+
+            public function getCreatedAt(): ?\DateTimeImmutable
+            {
+                return $this->createdAt;
+            }
         };
 
         $original = $this->transformer->reverseTransform([
@@ -252,8 +361,15 @@ final class AutomaticTransformerTest extends TestCase
                 $this->secret = 'Hidden';
             }
 
-            public function getName(): ?string { return $this->name; }
-            public function getSecret(): ?string { return $this->secret; }
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
+
+            public function getSecret(): ?string
+            {
+                return $this->secret;
+            }
         };
 
         $result = $this->transformer->transform($user);
@@ -273,7 +389,10 @@ final class AutomaticTransformerTest extends TestCase
                 $this->status = TestUserStatus::ACTIVE;
             }
 
-            public function getStatus(): ?TestUserStatus { return $this->status; }
+            public function getStatus(): ?TestUserStatus
+            {
+                return $this->status;
+            }
         };
 
         $result = $this->transformer->transform($model);
@@ -292,7 +411,10 @@ final class AutomaticTransformerTest extends TestCase
                 $this->priority = TestPriority::HIGH;
             }
 
-            public function getPriority(): ?TestPriority { return $this->priority; }
+            public function getPriority(): ?TestPriority
+            {
+                return $this->priority;
+            }
         };
 
         $result = $this->transformer->transform($model);
@@ -306,7 +428,10 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField]
             private ?TestUserStatus $status = null;
 
-            public function getStatus(): ?TestUserStatus { return $this->status; }
+            public function getStatus(): ?TestUserStatus
+            {
+                return $this->status;
+            }
         };
 
         $result = $this->transformer->transform($model);
@@ -321,8 +446,17 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField]
             private ?TestUserStatus $status = null;
 
-            public function setStatus(?TestUserStatus $status): self { $this->status = $status; return $this; }
-            public function getStatus(): ?TestUserStatus { return $this->status; }
+            public function setStatus(?TestUserStatus $status): self
+            {
+                $this->status = $status;
+
+                return $this;
+            }
+
+            public function getStatus(): ?TestUserStatus
+            {
+                return $this->status;
+            }
         };
 
         $data = ['status' => 'active'];
@@ -340,8 +474,17 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField]
             private ?TestPriority $priority = null;
 
-            public function setPriority(?TestPriority $priority): self { $this->priority = $priority; return $this; }
-            public function getPriority(): ?TestPriority { return $this->priority; }
+            public function setPriority(?TestPriority $priority): self
+            {
+                $this->priority = $priority;
+
+                return $this;
+            }
+
+            public function getPriority(): ?TestPriority
+            {
+                return $this->priority;
+            }
         };
 
         $data = ['priority' => 2];
@@ -359,8 +502,17 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField]
             private ?TestUserStatus $status = null;
 
-            public function setStatus(?TestUserStatus $status): self { $this->status = $status; return $this; }
-            public function getStatus(): ?TestUserStatus { return $this->status; }
+            public function setStatus(?TestUserStatus $status): self
+            {
+                $this->status = $status;
+
+                return $this;
+            }
+
+            public function getStatus(): ?TestUserStatus
+            {
+                return $this->status;
+            }
         };
 
         $data = ['status' => 'invalid_value'];
@@ -383,12 +535,41 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField]
             private ?TestPriority $priority = null;
 
-            public function setId(?int $id): self { $this->id = $id; return $this; }
-            public function getId(): ?int { return $this->id; }
-            public function setStatus(?TestUserStatus $status): self { $this->status = $status; return $this; }
-            public function getStatus(): ?TestUserStatus { return $this->status; }
-            public function setPriority(?TestPriority $priority): self { $this->priority = $priority; return $this; }
-            public function getPriority(): ?TestPriority { return $this->priority; }
+            public function setId(?int $id): self
+            {
+                $this->id = $id;
+
+                return $this;
+            }
+
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
+
+            public function setStatus(?TestUserStatus $status): self
+            {
+                $this->status = $status;
+
+                return $this;
+            }
+
+            public function getStatus(): ?TestUserStatus
+            {
+                return $this->status;
+            }
+
+            public function setPriority(?TestPriority $priority): self
+            {
+                $this->priority = $priority;
+
+                return $this;
+            }
+
+            public function getPriority(): ?TestPriority
+            {
+                return $this->priority;
+            }
         };
 
         // Create object from array
@@ -422,9 +603,20 @@ final class AutomaticTransformerTest extends TestCase
 
             public ?string $notTransformed = 'secret'; // No attribute
 
-            public function getId(): ?int { return $this->id; }
-            public function getName(): ?string { return $this->name; }
-            public function getNotTransformed(): ?string { return $this->notTransformed; }
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
+
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
+
+            public function getNotTransformed(): ?string
+            {
+                return $this->notTransformed;
+            }
         };
 
         $result = $this->transformer->transform($model);
@@ -443,10 +635,29 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField(name: 'user_name')]
             public ?string $name = null;
 
-            public function setId(?int $id): self { $this->id = $id; return $this; }
-            public function getId(): ?int { return $this->id; }
-            public function setName(?string $name): self { $this->name = $name; return $this; }
-            public function getName(): ?string { return $this->name; }
+            public function setId(?int $id): self
+            {
+                $this->id = $id;
+
+                return $this;
+            }
+
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
+
+            public function setName(?string $name): self
+            {
+                $this->name = $name;
+
+                return $this;
+            }
+
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
         };
 
         $data = ['id' => '999', 'user_name' => 'Bob'];
@@ -469,9 +680,20 @@ final class AutomaticTransformerTest extends TestCase
             #[JsonField]
             public ?bool $publicActive = true;
 
-            public function getPrivateId(): ?int { return $this->privateId; }
-            public function getProtectedName(): ?string { return $this->protectedName; }
-            public function isPublicActive(): ?bool { return $this->publicActive; }
+            public function getPrivateId(): ?int
+            {
+                return $this->privateId;
+            }
+
+            public function getProtectedName(): ?string
+            {
+                return $this->protectedName;
+            }
+
+            public function isPublicActive(): ?bool
+            {
+                return $this->publicActive;
+            }
         };
 
         $result = $this->transformer->transform($model);
@@ -512,8 +734,15 @@ final class AutomaticTransformerTest extends TestCase
             // No setters defined - transformer sets properties directly
 
             // Getters only needed for assertions
-            public function getId(): ?int { return $this->id; }
-            public function getName(): ?string { return $this->name; }
+            public function getId(): ?int
+            {
+                return $this->id;
+            }
+
+            public function getName(): ?string
+            {
+                return $this->name;
+            }
         };
 
         $data = ['id' => '123', 'name' => 'DirectSet'];
@@ -524,4 +753,3 @@ final class AutomaticTransformerTest extends TestCase
         $this->assertSame('DirectSet', $object->getName());
     }
 }
-

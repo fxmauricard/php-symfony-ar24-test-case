@@ -19,7 +19,7 @@ use App\Infrastructure\Ar24\Http\User\Exception\UserException;
 final readonly class RegisteredMailClient implements RegisteredMailClientInterface
 {
     public function __construct(
-        private ApiClient                     $client,
+        private ApiClient $client,
         private RegisteredMailDataTransformer $transformer,
     ) {
     }
@@ -28,9 +28,6 @@ final readonly class RegisteredMailClient implements RegisteredMailClientInterfa
      * Send a simple or eIDAS Registered Mail.
      *
      * @param int $userId User ID
-     * @param RegisteredMail $registeredMail
-     *
-     * @return RegisteredMail
      *
      * @throws ApiException
      */
@@ -40,8 +37,8 @@ final readonly class RegisteredMailClient implements RegisteredMailClientInterfa
             'body' => $this->transformer->transform($registeredMail, false)
                 + [
                     'id_user' => $userId,
-                    'attachment' => $registeredMail->attachments ?? [] // Fix to ensure attachments are sent under the 'attachment' key as API is not consistent.
-            ],
+                    'attachment' => $registeredMail->attachments ?? [], // Fix to ensure attachments are sent under the 'attachment' key as API is not consistent.
+                ],
         ], [
             'missing_email' => [RecipientException::class, 'Please specify an email address'],
             'same_sender_recipients_emails' => [RecipientException::class, 'Recipient email and sender email must be different'],
@@ -101,7 +98,7 @@ final readonly class RegisteredMailClient implements RegisteredMailClientInterfa
      */
     public function list(int $userId): array
     {
-        $data = $this->client->get( '/user/mail', [
+        $data = $this->client->get('/user/mail', [
             'query' => [
                 'id_user' => $userId,
             ],
@@ -111,7 +108,7 @@ final readonly class RegisteredMailClient implements RegisteredMailClientInterfa
         $registeredMailsData = $data['result'] ?? [];
 
         return array_map(
-            fn(array $registeredMailData) => $this->transformer->reverseTransform($registeredMailData),
+            fn (array $registeredMailData) => $this->transformer->reverseTransform($registeredMailData),
             $registeredMailsData
         );
     }

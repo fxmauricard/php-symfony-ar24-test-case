@@ -2,9 +2,8 @@
 
 namespace App\Command\Ar24\RegisteredMail;
 
-use App\Infrastructure\Ar24\Http\RegisteredMail\RegisteredMailClient;
 use App\Infrastructure\Ar24\Http\RegisteredMail\DataTransformer\RegisteredMailDataTransformer;
-use Exception;
+use App\Infrastructure\Ar24\Http\RegisteredMail\RegisteredMailClient;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,17 +21,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 readonly class GetByIdCommand
 {
     public function __construct(
-        private RegisteredMailClient          $client,
+        private RegisteredMailClient $client,
         private RegisteredMailDataTransformer $transformer,
     ) {
     }
 
     public function __invoke(
-        InputInterface                                                                  $input,
-        OutputInterface                                                                 $output,
-        #[Argument(description: 'The ID of the registered mail to retrieve')] int       $id
-    ): int
-    {
+        InputInterface $input,
+        OutputInterface $output,
+        #[Argument(description: 'The ID of the registered mail to retrieve')] int $id,
+    ): int {
         $io = new SymfonyStyle($input, $output);
 
         $io->title(sprintf('Retrieving AR24 registered mail for ID: %s', $id));
@@ -44,10 +42,11 @@ readonly class GetByIdCommand
             $io->success('Registered mail found!');
             $io->table(
                 ['Field', 'Value'],
-                array_map(fn($k, $v) => [$k, is_array($v) ? json_encode($v) : $v], array_keys($registeredMailData), $registeredMailData)
+                array_map(fn ($k, $v) => [$k, is_array($v) ? json_encode($v) : $v], array_keys($registeredMailData), $registeredMailData)
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $io->error(sprintf('An error occurred: %s', $e->getMessage()));
+
             return Command::FAILURE;
         }
 

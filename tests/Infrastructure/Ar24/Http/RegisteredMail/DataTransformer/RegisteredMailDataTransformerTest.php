@@ -7,7 +7,6 @@ use App\Infrastructure\Ar24\Http\RegisteredMail\DataTransformer\RegisteredMailDa
 use App\Infrastructure\Ar24\Http\RegisteredMail\Model\AttachmentDetail;
 use App\Infrastructure\Ar24\Http\RegisteredMail\Model\RecipientUpdate;
 use App\Infrastructure\Ar24\Http\RegisteredMail\Model\RegisteredMail;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class RegisteredMailDataTransformerTest extends TestCase
@@ -32,7 +31,7 @@ final class RegisteredMailDataTransformerTest extends TestCase
 
         $update = new RecipientUpdate(
             id: 5,
-            date: new DateTimeImmutable('2017-11-18 18:13:01'),
+            date: new \DateTimeImmutable('2017-11-18 18:13:01'),
             lastname: 'Dupont',
             firstname: 'Marie',
             company: 'Marie Corp'
@@ -62,20 +61,20 @@ final class RegisteredMailDataTransformerTest extends TestCase
             refDossier: 'AAAA',
             refClient: '111',
             refFacturation: 'BBB',
-            date: new DateTimeImmutable('2017-11-15 18:13:01'),
+            date: new \DateTimeImmutable('2017-11-15 18:13:01'),
             fullHashSha256: '9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08',
             sendFail: false,
             isEidas: false,
             proofEvUrl: 'https://sandbox.ar24.fr/get/proof/ev-123?token=1111111111111111',
-            tsEvDate: new DateTimeImmutable('2017-11-15 18:15:01'),
+            tsEvDate: new \DateTimeImmutable('2017-11-15 18:15:01'),
             proofArUrl: 'https://sandbox.ar24.fr/get/proof/ar-123?token=1111111111111111',
-            viewDate: new DateTimeImmutable('2017-11-15 19:15:01'),
+            viewDate: new \DateTimeImmutable('2017-11-15 19:15:01'),
             proofNgUrl: 'https://sandbox.ar24.fr/get/proof/ng-123?token=1111111111111111',
-            negligenceDate: new DateTimeImmutable('2017-11-30 19:15:01'),
+            negligenceDate: new \DateTimeImmutable('2017-11-30 19:15:01'),
             proofRfUrl: 'https://sandbox.ar24.fr/get/proof/rf-123?token=1111111111111111',
-            refusedDate: new DateTimeImmutable('2017-11-18 19:15:01'),
+            refusedDate: new \DateTimeImmutable('2017-11-18 19:15:01'),
             proofBcUrl: 'https://sandbox.ar24.fr/get/proof/bc-123?token=1111111111111111',
-            bouncedDate: new DateTimeImmutable('2017-11-15 18:15:01'),
+            bouncedDate: new \DateTimeImmutable('2017-11-15 18:15:01'),
             pdfContent: 'https://sandbox.ar24.fr/get/content/123?token=1111111111111111',
             zip: 'https://sandbox.ar24.fr/get/zip/123?token=1111111111111111',
             reqNotifyEv: true,
