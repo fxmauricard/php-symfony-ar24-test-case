@@ -11,8 +11,6 @@
         "ext-iconv": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "ext-sodium": "*",
-        "ext-xml": "*",
         "api-platform/doctrine-orm": "^4.2",
         "api-platform/symfony": "^4.2",
         "doctrine/doctrine-bundle": "^3.2.2",
@@ -46,6 +44,10 @@
             "symfony/runtime": true
         },
         "bump-after-update": true,
+        "platform": {
+            "ext-sodium": "1.0",
+            "ext-xml": "1.0"
+        },
         "sort-packages": true
     },
     "autoload": {
