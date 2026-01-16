@@ -25,8 +25,8 @@ A simple mockup that demonstrates AR24 integration in a modern PHP/Symfony appli
 ## Features
 
 - Default Symfony "Welcome" page is still available at `https://localhost/`.
-- Domain entities are exposed as a REST API using API Platform (https://localhost/api).
-- Swagger UI is available at`https://localhost/api/docs for easy exploration and testing of the API.
+- Domain entities are exposed as a REST API using API Platform at `https://localhost/api`.
+- Swagger UI is available at `https://localhost/api/docs` for easy exploration and testing of the API.
 
 
 - API is secured using JWT authentication. 
